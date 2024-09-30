@@ -1,6 +1,6 @@
-import Footer from "../ui/components/footer/Footer";
 import LeftSideBar from "../ui/components/sidebar/LeftSideBar";
 import RightSideBar from "../ui/components/sidebar/RightSideBar";
+import Footer from "../ui/footer/Footer";
 
 export default function DashboardLayout({
     children,

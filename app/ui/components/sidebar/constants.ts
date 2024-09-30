@@ -3,7 +3,7 @@ import { faFileInvoice, faGear, faHeadset, faHouse, faMoneyCheck, faUser } from 
 export const customerSideBar = [
     {
         name: 'Dashboard',
-        link: '/',
+        link: '/dashboard',
         icon: faHouse,
     },
     {

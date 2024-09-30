@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      width: {
+        110: '350px'
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-radial-circle': 'radial-gradient(circle, var(--tw-gradient-stops))',
@@ -30,7 +33,7 @@ const config: Config = {
           colors: {
             background: "#a1a1aa",
             primary: {
-              400:'#137AD9',
+              400: '#137AD9',
               500: '#004493',
             },
             content1: {

@@ -8,8 +8,8 @@ const AppBar = () => {
         <div className='bg-content1-900 w-full min-h-14 p-3 flex justify-between items-center gap-5'>
 
             <div className='flex flex-col gap-2 flex-1'>
-                <h1 className='text-3xl text-primary-300 font-semibold'>Hey Sai Nyi</h1>
-                <p className='text-gray-500'>Welcome to banking management system</p>
+                <h1 className='text-3xl text-primary-400 font-semibold'>Hi ,  Sai Nyi 👋</h1>
+                <p className='text-gray-400'>Welcome to banking management system</p>
             </div>
 
             <div className='flex-1'>
@@ -17,8 +17,8 @@ const AppBar = () => {
             </div>
 
             <div className='flex gap-5'>
-                <FontAwesomeIcon className='text-2xl text-primary-300' icon={faBell} />
-                <FontAwesomeIcon className='text-2xl text-primary-300'icon={faEnvelope} />
+                <FontAwesomeIcon className='text-2xl text-primary-400' icon={faBell} />
+                <FontAwesomeIcon className='text-2xl text-primary-400'icon={faEnvelope} />
             </div>
         </div>
     )
