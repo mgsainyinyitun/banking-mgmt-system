@@ -6,9 +6,8 @@ export const authConfig = {
     },
     callbacks: {
         authorized({ auth, request: { nextUrl } }) {
-            console.log('auth:',auth);
-            console.log('nextUrl',nextUrl);
-
+            // console.log('auth:', auth);
+            // console.log('nextUrl', nextUrl);
             const isLoggedIn = !!auth?.user;
             const home = nextUrl.pathname.startsWith('/');
 

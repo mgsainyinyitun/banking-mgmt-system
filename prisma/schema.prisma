@@ -13,20 +13,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model BankAccount {
+  id               Int           @id @default(autoincrement())
+  account_name     String
+  accountNumber    String        @unique @db.Char(36) // 16 digit account number
+  accountType      AccountType
+  balance          Float         @default(0.0)
+  availableBalance Float         @default(0.0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  User             User          @relation(fields: [userId], references: [id])
+  userId           String        @db.Char(36)
+  accountOpenedAt  DateTime      @default(now())
+  accountClosedAt  DateTime?
+  accountStatus    AccountStatus @default(ACTIVE)
+}
+
 model User {
-  id        String       @id @default(uuid())
-  username  String
-  nrc       String       @unique
-  dob       DateTime
-  email     String       @unique
-  phone     String
-  city      String
-  state     String
-  address   String
-  password  String
-  type      ACCOUNT_TYPE @default(CUSTOMER)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id           String        @id @default(uuid()) @db.Char(36)
+  username     String
+  nrc          String        @unique
+  dob          DateTime
+  email        String        @unique
+  phone        String
+  city         String
+  state        String
+  address      String
+  password     String
+  type         ACCOUNT_TYPE  @default(CUSTOMER)
+  bankAccounts BankAccount[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+enum AccountStatus {
+  ACTIVE
+  CLOSED
+  SUSPENDED
+}
+
+enum AccountType {
+  SAVINGS
+  CHECKING
 }
 
 enum ACCOUNT_TYPE {

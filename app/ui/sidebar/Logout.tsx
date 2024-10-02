@@ -12,7 +12,7 @@ const Logout = () => {
             }}
             className="text-red-500 flex py-2.5 px-4 rounded-2xl transition duration-200 hover:bg-primary-300 text-lg hover:text-white hover:font-semibold"
         >
-            <button className='flex' type='submit'>
+            <button className='flex w-full' type='submit'>
                 <span className='w-8 h-8 bg-red-400 flex justify-center items-center p-1 rounded-lg'>
                     <FontAwesomeIcon className='text-white' icon={faArrowRightFromBracket} />
                 </span>

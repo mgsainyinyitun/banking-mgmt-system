@@ -1,10 +1,11 @@
+import AppBar from '@/app/ui/appbar/AppBar';
+import MoneyFlow from '@/app/ui/dashboard/MoneyFlow';
+import RecentTransactions from '@/app/ui/dashboard/RecentTransactions';
+import TotalBalance from '@/app/ui/dashboard/TotalBalance';
 import React from 'react'
-import AppBar from '../ui/components/appbar/AppBar';
-import TotalBalance from '../ui/dashboard/TotalBalance';
-import MoneyFlow from '../ui/dashboard/MoneyFlow';
-import RecentTransactions from '../ui/dashboard/RecentTransactions';
 
-const Dashboard = () => {
+const Dashboard = async() => {
+
   return (
     <div className='w-full bg-content1-900 rounded-2xl flex flex-col h-full overflow-hidden'>
       <div>
@@ -21,7 +22,6 @@ const Dashboard = () => {
           <RecentTransactions />
         </div>
       </div>
-
     </div>
   )
 }

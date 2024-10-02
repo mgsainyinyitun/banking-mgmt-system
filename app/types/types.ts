@@ -1,4 +1,4 @@
-import { ACCOUNT_TYPE } from "@prisma/client";
+import { ACCOUNT_TYPE, AccountStatus } from "@prisma/client";
 
 export type User = {
     id?: string,
@@ -14,4 +14,20 @@ export type User = {
     type: ACCOUNT_TYPE,
     createAt: Date,
     updateAt: Date,
+}
+
+export type Bank = {
+    id?: string,
+    account_name: string,
+    accountNumber?: string,
+    accountType: ACCOUNT_TYPE,
+    balance?: number,
+    availableBalance?: number,
+    User?: User,
+    userId?: string,
+    accountOpenedAt: Date,
+    accountClosedAt: Date,
+    createAt: Date,
+    updateAt: Date,
+    accountStatus: AccountStatus
 }

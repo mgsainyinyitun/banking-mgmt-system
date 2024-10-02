@@ -4,3 +4,9 @@ export enum ACCOUNT_TYPE {
     TELLER = 'TELLER',
     CUSTOMER = 'CUSTOMER',
 }
+
+
+export enum BANK_ACC_TYPE {
+    SAVINGS = 'SAVINGS',
+    CHECKING = 'CHECKING'
+}

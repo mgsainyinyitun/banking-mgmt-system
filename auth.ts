@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
@@ -17,31 +17,50 @@ async function getUser(email: string): Promise<User | undefined> {
     }
 }
 
-export const { auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
     ...authConfig,
     providers: [
         Credentials({
+            name: 'credentials',
             async authorize(credentials) {
-                const parsedCredentials = signInSchema.safeParse(credentials);
 
+                const parsedCredentials = signInSchema.safeParse(credentials);
                 if (parsedCredentials.success) {
                     const { email, password } = parsedCredentials.data;
                     const user = await getUser(email);
-                    if (!user) return null;
+                    if (!user) throw new CredentialsSignin('Please provide valid user');
 
-                    console.log('user:', user);
+                    // console.log('user:', user);
 
                     const passwordsMatch = await bcrypt.compare(password, user.password);
-
-                    console.log('passwordsMatch:', passwordsMatch);
                     if (passwordsMatch) {
+                        console.log('returne user');
                         return user
-                    };
+                    } else {
+                        console.log('Invalid credentials');
+                        throw new CredentialsSignin('Password not correct!')
+                    }
                 }
-
-                console.log('Invalid credentials');
                 return null;
             },
         }),
     ],
+    callbacks: {
+        async jwt({ token, user }) {
+            let pUsr = user as User;
+            if (pUsr) {
+                let usr = {
+                    id: pUsr.id,
+                    username: pUsr.username,
+                    type: pUsr.type
+                }
+                token.user = usr;
+            }
+            console.log('token is :::', token)
+            return token;
+        },
+        async session({ session, token }) {
+            return { ...session, ...token };
+        },
+    }
 });

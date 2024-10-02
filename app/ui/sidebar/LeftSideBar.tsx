@@ -19,7 +19,7 @@ export default function LeftSideBar() {
         <div className="flex h-[100%]">
             <div className={`bg-content1-900 items-center shadow-xl rounded-2xl text-primary-500 w-64 space-y-6 absolute inset-y-0 left-0 transform -translate-x-full transition-transform duration-200 ease-in-out md:relative md:translate-x-0`}>
 
-                <div className='h-full flex flex-col px-2 py-7'>
+                <div className='h-full flex flex-col px-2 py-7 overflow-auto'>
                     <div className='fled flex-col justify-center items-center'>
                         <div className='flex justify-center my-5'>
                             <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026704d" size="lg" />
@@ -42,7 +42,7 @@ export default function LeftSideBar() {
                         <Logout />
                     </nav>
 
-                    <div className='text-white mt-auto min-h-14  p-5 bg-content1-900 rounded-2xl flex flex-col'>
+                    <div className='text-white mt-auto  p-5 bg-content1-900 rounded-2xl flex flex-col'>
                         <div className='flex flex-col justify-center items-center'>
                             <h4 className='text-primary-400 text-lg font-semibold'>ZAI</h4>
                             <h4 className='text-primary-400 text-lg font-semibold'>BANKING</h4>

@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import Background from "./ui/components/common/Background";
 config.autoAddCss = false
 
 const geistSans = localFont({
@@ -34,7 +35,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       > <Providers>
-          {children}
+          <Background>
+            {children}
+          </Background>
         </Providers>
       </body>
     </html>

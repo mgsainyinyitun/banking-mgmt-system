@@ -20,6 +20,7 @@ const SignIn = () => {
     const onSubmitForm = async (data: SignInSchema) => {
         console.log('sumitting:', data);
         const response = await authenticate(data);
+        console.log(response);
         if (response?.errors) {
             toast.error(response?.errors?.message);
         }

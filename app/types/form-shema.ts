@@ -6,6 +6,13 @@ export const signInSchema = z.object({
     password: z.string().min(6, "Password must be at least 6 characters long"),
 })
 
+export const bankAccountSchema = z.object({
+    userId: z.string().min(0, 'Require'),
+    username: z.string().min(6, 'At Least 6 characters'),
+    accountType: z.string().min(0, 'Require')
+})
+
+
 export const signupSchema = z.object({
     username: z.string().min(3, "Username must be at least 3 characters long"),
     nrc: z.string().min(6, "NRC must be at least y characters long"),
@@ -34,3 +41,5 @@ export const signupSchema = z.object({
 export type SignUpSchema = z.infer<typeof signupSchema>;
 
 export type SignInSchema = z.infer<typeof signInSchema>;
+
+export type BankAccountSchema = z.infer<typeof bankAccountSchema>

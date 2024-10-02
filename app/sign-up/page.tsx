@@ -12,10 +12,12 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const SignIn = () => {
     const { theme } = useTheme();
     const [usertheme, setUserTheme] = useState('light');
+    const router = useRouter();
 
     useEffect(() => {
         if (theme) {
@@ -30,6 +32,9 @@ const SignIn = () => {
 
     const onSubmitForm = async (data: SignUpSchema) => {
         const response = await signUp(data);
+        if (response.success) {
+            router.push('/sign-in');
+        }
         if (response?.errors) {
             toast.error(response?.errors?.message);
         }
