@@ -2,9 +2,7 @@
 import { signOut } from "@/auth";
 import { Button } from "@nextui-org/react";
 
-export default function Home() {
-
-
+export default async function Home() {
   return (
     <div>
       <form

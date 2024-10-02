@@ -1,18 +1,23 @@
-'use client'
-import { faArrowRightFromBracket, faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Button } from '@nextui-org/react';
+import { Avatar } from '@nextui-org/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { customerSideBar } from './constants';
 import Image from 'next/image';
+import { signOut } from '@/auth';
+import Logout from './Logout';
 
 export default function LeftSideBar() {
-    const [isOpen, setIsOpen] = useState(false);
+    // const [isOpen, setIsOpen] = useState(false);
+    // ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+
+    async function signOutAccount() {
+        await signOut();
+    }
 
     return (
         <div className="flex h-[100%]">
-            <div className={`bg-content1-900 items-center shadow-xl rounded-2xl text-primary-500 w-64 space-y-6 absolute inset-y-0 left-0 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out md:relative md:translate-x-0`}>
+            <div className={`bg-content1-900 items-center shadow-xl rounded-2xl text-primary-500 w-64 space-y-6 absolute inset-y-0 left-0 transform -translate-x-full transition-transform duration-200 ease-in-out md:relative md:translate-x-0`}>
 
                 <div className='h-full flex flex-col px-2 py-7'>
                     <div className='fled flex-col justify-center items-center'>
@@ -33,12 +38,8 @@ export default function LeftSideBar() {
                                 </Link>
                             ))
                         }
-                        <a  className="text-red-500 flex py-2.5 px-4 rounded-2xl transition duration-200 hover:bg-primary-300 text-lg hover:text-white hover:font-semibold">
-                            <span className='w-8 h-8 bg-red-400 flex justify-center items-center p-1 rounded-lg'>
-                                <FontAwesomeIcon className='text-white' icon={faArrowRightFromBracket} />
-                            </span>
-                            <span className='ml-3'>Logout</span>
-                        </a>
+
+                        <Logout />
                     </nav>
 
                     <div className='text-white mt-auto min-h-14  p-5 bg-content1-900 rounded-2xl flex flex-col'>

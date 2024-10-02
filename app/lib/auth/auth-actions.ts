@@ -5,7 +5,7 @@ import prisma from "../prisma";
 import bcrypt from 'bcryptjs';
 import { redirect } from "next/navigation";
 import { Prisma } from "@prisma/client";
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 
 export async function signUp(formData: SignUpSchema) {
@@ -52,5 +52,25 @@ export async function authenticate(formData: SignInSchema) {
         } else {
             redirect('/dashboard');
         }
+    }
+}
+
+// export async function authenticate(formData: SignInSchema) {
+//     try {
+//         await signIn('credentials', formData);
+//     } catch (error) {
+//         if (error instanceof AuthError) {
+//             return 'log in failed'
+//         }
+//         throw error;
+//     }
+// }
+
+
+export async function doLogout() {
+    try {
+        await signOut({ redirectTo: "/sign-in" });
+    } catch (err) {
+        console.log(err);
     }
 }

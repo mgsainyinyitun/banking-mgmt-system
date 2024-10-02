@@ -1,11 +1,12 @@
 'use client'
 import { useState } from 'react';
-import CreditCart from '../../dashboard/CreditCart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendDown, faArrowTrendUp, faRightLeft } from '@fortawesome/free-solid-svg-icons';
 import { Avatar } from '@nextui-org/react';
+import CreditCart from '../dashboard/CreditCart';
 
 export default function RightSideBar() {
+
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -43,8 +44,6 @@ export default function RightSideBar() {
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     );

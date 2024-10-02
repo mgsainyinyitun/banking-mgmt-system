@@ -9,8 +9,20 @@ import FormInput from '../ui/components/form/FormInput';
 import FormPassword from '../ui/components/form/FormPassword';
 import FormDate from '../ui/components/form/FormDate';
 import toast, { Toaster } from 'react-hot-toast';
+import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
+import Link from 'next/link';
 
 const SignIn = () => {
+    const { theme } = useTheme();
+    const [usertheme, setUserTheme] = useState('light');
+
+    useEffect(() => {
+        if (theme) {
+            setUserTheme(theme);
+        }
+    }, [theme])
+
     const { control, register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<SignUpSchema>({
         resolver: zodResolver(signupSchema),
     });
@@ -24,14 +36,22 @@ const SignIn = () => {
     }
 
     return (
-        <div className='flex h-screen justify-center w-full'>
+        <div className={`flex h-screen justify-center w-full ${usertheme === 'light' ? 'bg-gradient-radial-circle from-pink-400 to-cyan-300' : 'bbg-gray-500'}`}>
             <Toaster />
             <div className='w-full overflow-auto'>
                 <div className='flex justify-center'>
                     <form
                         onSubmit={handleSubmit(onSubmitForm)}
-                        className='m-5 w-full md:w-[50%] lg:w-[35%] border-1 rounded-xl border-gray-200 p-4 flex flex-col gap-5'>
-                        <h1 className='text-2xl text-blue-500 font-semibold'>Register Account</h1>
+                        className='bg-content1-900 m-5 w-full md:w-[50%] lg:w-[35%] rounded-xl p-4 flex flex-col gap-5'>
+                        <h1 className='text-4xl text-blue-500 font-semibold'>Register Account</h1>
+
+                        <div className='flex flex-col justify-center bg-sky-300 p-3 rounded-2xl my-5 text-blue-700'>
+                            <h3>Already Have an Account?</h3>
+                            <Link href="/sign-in" >
+                                Sign In
+                            </Link>
+                        </div>
+
                         <FormInput
                             register={register}
                             label='Full Name'

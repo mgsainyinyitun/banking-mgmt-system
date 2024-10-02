@@ -6,7 +6,7 @@ import RecentTransactions from '../ui/dashboard/RecentTransactions';
 
 const Dashboard = () => {
   return (
-    <div className='w-full bg-content1-900 rounded-2xl flex flex-col h-full'>
+    <div className='w-full bg-content1-900 rounded-2xl flex flex-col h-full overflow-hidden'>
       <div>
         <AppBar />
       </div>

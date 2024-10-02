@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { authenticate } from '../lib/auth/auth-actions';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { Button } from '@nextui-org/react';
@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import FormInput from '../ui/components/form/FormInput';
 import FormPassword from '../ui/components/form/FormPassword';
 import toast, { Toaster } from 'react-hot-toast';
+import { useTheme } from 'next-themes';
 
 const SignIn = () => {
 
@@ -24,14 +25,24 @@ const SignIn = () => {
         }
     }
 
+    const { theme } = useTheme();
+    const [usertheme, setUserTheme] = useState('light');
+
+    useEffect(() => {
+        if (theme) {
+            setUserTheme(theme);
+        }
+    }, [theme])
+
     return (
-        <div className='flex h-screen justify-center w-full'>
+        <div className={`flex h-screen justify-center w-full ${usertheme === 'light' ? 'bg-gradient-radial-circle from-pink-400 to-cyan-300' : 'bbg-gray-500'}`}>
+
             <Toaster />
             <div className='w-full overflow-auto'>
                 <div className='flex justify-center items-center'>
                     <form
                         onSubmit={handleSubmit(onSubmitForm)}
-                        className='m-5 w-full md:w-[50%] lg:w-[35%] border-1 rounded-xl border-gray-200 p-4 flex flex-col gap-5'>
+                        className='bg-content1-900 m-5 w-full md:w-[50%] lg:w-[35%] rounded-xl p-4 flex flex-col gap-5'>
                         <h1 className='text-2xl my-3 text-blue-500 font-semibold'>Sign In</h1>
                         <FormInput
                             register={register}

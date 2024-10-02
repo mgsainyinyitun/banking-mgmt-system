@@ -5,7 +5,6 @@ import bcrypt from 'bcryptjs';
 import { User } from './app/types/types';
 import prisma from './app/lib/prisma';
 import { signInSchema } from './app/types/form-shema';
-import { NextResponse } from 'next/server';
 
 async function getUser(email: string): Promise<User | undefined> {
     try {
