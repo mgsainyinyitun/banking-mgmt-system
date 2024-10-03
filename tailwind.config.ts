@@ -38,6 +38,9 @@ const config: Config = {
             },
             content1: {
               "900": 'rgba(255,255,255,0.7)'
+            },
+            content2: {
+              "900": 'rgba(19,122,217,0.5)'
             }
           },
         }, // light theme colors

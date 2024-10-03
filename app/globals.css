@@ -26,3 +26,26 @@ body {
   }
 } */
 
+/* Scroll Bar */
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /* background-image: radial-gradient(circle farthest-corner at 83.7% 4.3%, #121317 0%, rgba(15, 51, 92, 1) 90%); */
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-image: radial-gradient(circle farthest-corner at 83.7% 4.3%, #e289d5 0%, rgba(15, 51, 92, 0.5) 90%);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 250, 0.3);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-image: radial-gradient(circle farthest-corner at 83.7% 4.3%, rgba(15, 51, 92, 0.5) 0%, #BB2020 90%);
+}

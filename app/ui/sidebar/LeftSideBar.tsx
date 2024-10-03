@@ -1,19 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar } from '@nextui-org/react';
 import Link from 'next/link';
-import { useState } from 'react';
 import { customerSideBar } from './constants';
 import Image from 'next/image';
-import { signOut } from '@/auth';
 import Logout from './Logout';
+import { auth } from '@/auth';
+import { DEFAULT_PROFILE, ROUTE_TYPE } from '@/app/constants/CONST';
+import { UserInfo } from '@/app/types/types';
 
-export default function LeftSideBar() {
-    // const [isOpen, setIsOpen] = useState(false);
-    // ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+interface LeftSideBarProps {
+    user: UserInfo | undefined;
+}
 
-    async function signOutAccount() {
-        await signOut();
-    }
+export default async function LeftSideBar({ user }: LeftSideBarProps) {
+    const session = await auth();
+    const ty: string | undefined = session?.user?.type;
 
     return (
         <div className="flex h-[100%]">
@@ -22,15 +23,15 @@ export default function LeftSideBar() {
                 <div className='h-full flex flex-col px-2 py-7 overflow-auto'>
                     <div className='fled flex-col justify-center items-center'>
                         <div className='flex justify-center my-5'>
-                            <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026704d" size="lg" />
+                            <Avatar src={user?.profileImage ? user.profileImage : DEFAULT_PROFILE} size="lg" />
                         </div>
-                        <h1 className="text-2xl font-bold text-center">Sai Nyi</h1>
+                        <h1 className="text-2xl font-bold text-center">{user?.username ? user?.username : 'Guest'}</h1>
                     </div>
 
                     <nav className='mt-10'>
                         {
                             customerSideBar.map(itm => (
-                                <Link href={itm.link} className="flex py-2.5 px-4 rounded-2xl transition duration-200 hover:bg-primary-300 text-lg hover:text-white hover:font-semibold">
+                                <Link href={`/${ty ? ROUTE_TYPE[ty] : ''}${itm.link}`} className="flex py-2.5 px-4 rounded-2xl transition duration-200 hover:bg-primary-300 text-lg hover:text-white hover:font-semibold">
                                     <span className='w-8 h-8 bg-primary-400 flex justify-center items-center p-1 rounded-lg'>
                                         <FontAwesomeIcon className='text-white' icon={itm.icon} />
                                     </span>

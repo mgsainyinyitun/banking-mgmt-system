@@ -1,19 +1,30 @@
 'use server'
 import { BankAccountSchema } from "@/app/types/form-shema";
 import prisma from "../prisma";
-import { getUser } from "./user-actions";
 import { Bank } from "@/app/types/types";
-import { AccountType } from "@prisma/client";
+import { ACCOUNT_TYPE } from "@prisma/client";
 
-
-export async function getBankAccounts(id: string): Promise<any | undefined> {
+export async function getBankAccounts(id: string | undefined): Promise<Bank[] | undefined> {
     try {
-        const bankAccount = await prisma.bankAccount.findMany({
+        const bankAccounts = await prisma.bankAccount.findMany({
             where: { userId: id }
-        })
-        if (!bankAccount) return undefined;
+        });
+        if (!bankAccounts) return undefined;
 
-        return bankAccount;
+        return bankAccounts.map(bankAccount => ({
+            id: bankAccount.id,
+            account_name: bankAccount.account_name,
+            accountNumber: bankAccount.accountNumber,
+            accountType: bankAccount.accountType,
+            accountStatus: bankAccount.accountStatus,
+            balance: bankAccount.balance,
+            availableBalance: bankAccount.availableBalance,
+            createdAt: bankAccount.createdAt,
+            updatedAt: bankAccount.updatedAt,
+            userId: bankAccount.userId,
+            accountOpenedAt: bankAccount.accountOpenedAt,
+            accountClosedAt: bankAccount.accountClosedAt,
+        })) as Bank[];  // Cast to custom Bank[] type
     } catch (error) {
         console.log(error);
     }
@@ -40,7 +51,7 @@ export async function createBankAccount(formData: BankAccountSchema): Promise<Ba
         });
 
         console.log('created:', dbBank);
-
+        
         return;
 
     } catch (error) {
@@ -52,9 +63,8 @@ function generateAccountNumber(): string {
     return Math.floor(1000000000000000 + Math.random() * 9000000000000000).toString();
 }
 
-
-function convertToAccountType(status: string): AccountType {
-    Object.values(AccountType).includes(status as AccountType)
-    return status as AccountType;
+function convertToAccountType(status: string): ACCOUNT_TYPE {
+    Object.values(ACCOUNT_TYPE).includes(status as ACCOUNT_TYPE)
+    return status as ACCOUNT_TYPE;
 
 }

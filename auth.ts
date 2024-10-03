@@ -52,7 +52,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 let usr = {
                     id: pUsr.id,
                     username: pUsr.username,
-                    type: pUsr.type
+                    type: pUsr.type,
+                    imageUrl: pUsr.profileImage,
                 }
                 token.user = usr;
             }

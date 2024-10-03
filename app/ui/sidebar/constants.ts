@@ -8,7 +8,7 @@ export const customerSideBar = [
     },
     {
         name: 'Profile',
-        link: '/',
+        link: '/dashboard/profile',
         icon: faUser,
     },
     {

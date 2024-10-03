@@ -1,7 +1,7 @@
 import { DateInput } from '@nextui-org/react';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Controller } from 'react-hook-form';
-import { CalendarDate } from "@internationalized/date";
+import { CalendarDate, parseDate } from "@internationalized/date";
 
 interface formDateProps {
     control: any,
@@ -9,11 +9,21 @@ interface formDateProps {
     setValue: (name: string, value: any) => void,
     name: string,
     label: string,
+    value?: string,
+    onChange?: () => void,
 }
 
-const FormDate = ({ control, error, setValue, name, label }: formDateProps) => {
+const FormDate = ({ control, error, setValue, name, label, value, onChange }: formDateProps) => {
+    
+    useEffect(() => {
+        if (value) {
+            const date = parseDate(value);
+            setValue(name, date);
+        }
+    }, [value]);
 
     const handleChange = (date: any) => {
+
         if (date instanceof CalendarDate) {
             const jsDate = new Date(
                 date.year,
@@ -21,6 +31,9 @@ const FormDate = ({ control, error, setValue, name, label }: formDateProps) => {
                 date.day
             );
             setValue(name, jsDate);
+            if (onChange) {
+                onChange();
+            }
         }
     }
 
@@ -37,9 +50,10 @@ const FormDate = ({ control, error, setValue, name, label }: formDateProps) => {
                     size="lg"
                     isRequired
                     errorMessage={error}
-                    value={field.value instanceof Date ? new CalendarDate(field.value.getFullYear(), field.value.getMonth() + 1, field.value.getDate()) : undefined}
+                    // value={value ? parseDate(value) : undefined}
                     onBlur={field.onBlur}
                     onChange={(calendarDate) => handleChange(calendarDate)}
+                    defaultValue={value ? parseDate(value) : undefined}
                 />
             )}
         />

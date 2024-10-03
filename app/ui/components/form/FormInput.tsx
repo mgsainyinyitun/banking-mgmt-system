@@ -7,15 +7,17 @@ interface formInputProps {
     icon?: IconDefinition,
     type: string,
     label: string,
-    placeholder: string,
+    placeholder?: string,
     iconColor?: string,
     isRequire?: boolean,
     name: string,
     error: string | undefined,
     register: any,
+    value?: string,
+    onChange?: (prm: any) => void,
 }
 
-const FormInput = ({ type, label, placeholder, icon, iconColor = 'text-sky-400', isRequire = true, name, error, register }: formInputProps) => {
+const FormInput = ({ onChange, type, label, placeholder, icon, iconColor = 'text-sky-400', isRequire = true, name, error, register, value }: formInputProps) => {
     return (
         <Input
             {...register(name)}
@@ -27,12 +29,14 @@ const FormInput = ({ type, label, placeholder, icon, iconColor = 'text-sky-400',
             className=''
             type={type}
             label={label}
-            placeholder={placeholder}
+            placeholder={placeholder ? placeholder : ''}
             labelPlacement="outside"
             startContent={
                 icon && <FontAwesomeIcon icon={icon} className={iconColor} />
             }
             errorMessage={error}
+            defaultValue={value ? value : ''}
+            onChange={onChange ? onChange : null}
         />
     )
 }
