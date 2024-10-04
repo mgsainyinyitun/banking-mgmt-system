@@ -1,5 +1,5 @@
 'use client'
-import { DEFAULT_PROFILE } from '@/app/constants/CONST';
+import { DEFAULT_PROFILE } from '@/app/constants/CONSTANTS';
 import { uploadProfile } from '@/app/lib/actions/user-actions';
 import { faPenAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

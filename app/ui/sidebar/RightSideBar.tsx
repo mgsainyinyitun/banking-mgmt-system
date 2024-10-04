@@ -5,7 +5,7 @@ import { Avatar } from '@nextui-org/react';
 import CreditCart from '../dashboard/CreditCart';
 import Footer from '../footer/Footer';
 import { Bank, UserInfo } from '@/app/types/types';
-import { DEFAULT_PROFILE } from '@/app/constants/CONST';
+import { DEFAULT_PROFILE } from '@/app/constants/CONSTANTS';
 import { getBankAccounts } from '@/app/lib/actions/bank-actions';
 import Loading from '../components/common/Loading';
 

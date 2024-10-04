@@ -31,11 +31,8 @@ export async function getBankAccounts(id: string | undefined): Promise<Bank[] | 
 }
 
 
-export async function createBankAccount(formData: BankAccountSchema): Promise<Bank | undefined> {
-    console.log('user id:', formData.userId);
+export async function createBankAccount(formData: BankAccountSchema) {
     try {
-        console.log('user id:', formData.userId);
-
         const bankAccountData: any = {
             account_name: formData.username,
             accountType: convertToAccountType(formData.accountType),  // Convert the account type string to enum
@@ -51,11 +48,12 @@ export async function createBankAccount(formData: BankAccountSchema): Promise<Ba
         });
 
         console.log('created:', dbBank);
-        
-        return;
+
+        return { success: true };
 
     } catch (error) {
         console.log(error);
+        return { success: false };
     }
 }
 

@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { ACCOUNT_TYPE } from "./constants/CONST";
+import { ACCOUNT_TYPE } from "./constants/CONSTANTS";
 
 const _ = async () => {
     const session = await auth();

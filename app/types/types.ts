@@ -34,3 +34,17 @@ export type Bank = {
     updateAt?: Date,
     accountStatus?: AccountStatus
 }
+
+export type Transaction = {
+    id?:number,
+    transaction_id?:string,
+    amount?:number,
+    transactionType?:string,
+    date?:Date,
+    description?:string,
+    bankAccountId?:number,
+    transactionStatus?:string,
+    createdAt?:Date,
+    updatedAt?:Date,
+
+}

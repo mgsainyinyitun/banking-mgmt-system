@@ -1,6 +1,7 @@
 import { faArrowTrendDown, faArrowTrendUp, faWallet } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Card } from '@nextui-org/react'
+import Link from 'next/link'
 import React from 'react'
 
 const TotalBalance = () => {
@@ -19,14 +20,18 @@ const TotalBalance = () => {
             </div>
 
             <div className='flex gap-5 justify-between'>
-                <div className='bg-content1-900 rounded-2xl flex p-5 flex-1 justify-center items-center gap-3'>
-                    <FontAwesomeIcon className='text-primary-400 text-3xl' icon={faArrowTrendDown} />
-                    <h3>Cash In</h3>
-                </div>
-                <div className='bg-content1-900 rounded-2xl flex p-5 flex-1 justify-center items-center gap-3'>
-                    <FontAwesomeIcon className='text-primary-400 text-3xl' icon={faArrowTrendUp} />
-                    <h3>Cash Out</h3>
-                </div>
+                <Link href='/cu/transaction/deposit' className='hover:shadow-lg hover:bg-sky-300 rounded-2xl'>
+                    <div className='bg-content1-900 rounded-2xl flex p-5 flex-1 justify-center items-center gap-3'>
+                        <FontAwesomeIcon className='text-primary-400 text-3xl' icon={faArrowTrendDown} />
+                        <h3>Deposit</h3>
+                    </div>
+                </Link>
+                <Link href='/cu/transaction/withdrawal' className='hover:shadow-lg hover:bg-sky-300 rounded-2xl'>
+                    <div className='bg-content1-900 rounded-2xl flex p-5 flex-1 justify-center items-center gap-3'>
+                        <FontAwesomeIcon className='text-primary-400 text-3xl' icon={faArrowTrendUp} />
+                        <h3>Withdrawal</h3>
+                    </div>
+                </Link>
             </div>
         </div>
     )

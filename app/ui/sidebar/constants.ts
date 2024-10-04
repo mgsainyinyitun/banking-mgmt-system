@@ -8,18 +8,18 @@ export const customerSideBar = [
     },
     {
         name: 'Profile',
-        link: '/dashboard/profile',
+        link: '/profile',
         icon: faUser,
+    },
+    {
+        name: 'Transaction',
+        link: '/transaction',
+        icon: faMoneyCheck,
     },
     {
         name: 'Invoice',
         link: '/',
         icon: faFileInvoice,
-    },
-    {
-        name: 'Transaction',
-        link: '/',
-        icon: faMoneyCheck,
     },
     {
         name: 'Settings',
