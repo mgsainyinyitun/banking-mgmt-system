@@ -2,9 +2,10 @@
 import { DepositSchema } from "@/app/types/form-shema";
 import prisma from "../prisma";
 import { TransactionStatus, TransactionType } from "@prisma/client";
-import { Transaction } from "@/app/types/types";
+import { Transaction, TransactionFilter } from "@/app/types/types";
 
-export async function getAllTransactions(id: number | undefined, count?: number, page?: number, pageSize?: number) {
+export async function getAllTransactions(
+    id: number | undefined, filter: TransactionFilter = {}, count?: number, page?: number, pageSize?: number) {
     if (!id) return;
     try {
         let skip = undefined;
@@ -14,9 +15,7 @@ export async function getAllTransactions(id: number | undefined, count?: number,
 
         const [transactions, total] = await prisma.$transaction([
             prisma.transaction.findMany({
-                where: {
-                    bankAccountId: id
-                },
+                where: { ...filter },
                 orderBy: {
                     createdAt: 'desc'
                 },
@@ -24,9 +23,7 @@ export async function getAllTransactions(id: number | undefined, count?: number,
                 take: count || undefined
             }),
             prisma.transaction.count({
-                where: {
-                    bankAccountId: id
-                }
+                where: { ...filter }
             })
         ]);
         const trans = transactions as Transaction[];

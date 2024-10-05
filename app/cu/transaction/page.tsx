@@ -7,7 +7,7 @@ import { auth } from '@/auth';
 const Transaction = async () => {
     const session = await auth();
     const banks: Bank[] = await getBankAccounts(session?.user?.id) as Bank[];
-    const res = await getAllTransactions(banks[0].id, 10, 1, 10);
+    const res = await getAllTransactions(banks[0].id, undefined, 10, 1, 10);
 
     return (
         <div className='w-full h-full p-3'>

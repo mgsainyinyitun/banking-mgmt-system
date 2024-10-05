@@ -1,6 +1,6 @@
 'use client'
 import { DEFAULT_PROFILE, TRANSACTION_COLUMNS } from '@/app/constants/CONSTANTS'
-import { Transaction } from '@/app/types/types'
+import { Transaction, TransactionFilter } from '@/app/types/types'
 import { faBank } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Avatar, Button, Chip, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
@@ -58,17 +58,22 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
       return <p className='w-full'>{rtn}</p>;
     }
   }
-
+  const pageSize = 10;
   const [page, setPage] = useState<number>(1);
+  const [totalItm, setTotalItem] = useState(total);
+  const [totalPages, setTotalPages] = useState(total ? Math.ceil(total / pageSize) : 1);
+  const [filter, setFilter] = useState<TransactionFilter>({});
   const [dbtransactions, setTransactions] = useState(transactions);
 
-  const pageSize = 10;
-  const totalPages = total ? Math.ceil(total / pageSize) : 1;
+
+  // let totalPages = total ? Math.ceil(total / pageSize) : 1;
 
   const refetch = async () => {
-    const res = await getAllTransactions(id, pageSize, page, pageSize);
+    const res = await getAllTransactions(id, filter, pageSize, page, pageSize);
     if (res?.success) {
       setTransactions(res.transactions);
+      res.total && setTotalPages(Math.ceil(res.total / pageSize));
+      res.total && setTotalItem(res.total);
     }
   }
 
@@ -76,12 +81,12 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
     if (page >= 1) {
       refetch();
     }
-  }, [page]);
+  }, [page, filter]);
 
   const bottomContent = useMemo(() => {
     return (
       <div className="py-2 px-2 mt-auto flex justify-between items-center">
-        <p>Total Transactions: {total}</p>
+        <p>Total Transactions: {totalItm}</p>
         <Pagination
           isCompact
           showControls
@@ -101,11 +106,11 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
         </div>
       </div>
     );
-  }, [page]);
+  }, [page, filter,totalPages,totalItm]);
 
   const top = useMemo(() => {
-    return <TopContent />
-  }, []);
+    return <TopContent filter={filter} setFilter={setFilter} />
+  }, [page,filter,totalPages,totalItm]);
 
   return (
     <Table
