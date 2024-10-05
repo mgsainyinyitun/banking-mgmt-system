@@ -1,8 +1,9 @@
 'use server'
-import { DepositSchema } from "@/app/types/form-shema";
+import { DepositSchema, WithdrawSchema } from "@/app/types/form-shema";
 import prisma from "../prisma";
 import { TransactionStatus, TransactionType } from "@prisma/client";
 import { Transaction, TransactionFilter } from "@/app/types/types";
+import { decreaseBalance, increaseBalance } from "./bank-actions";
 
 export async function getAllTransactions(
     id: number | undefined, filter: TransactionFilter = {}, count?: number, page?: number, pageSize?: number) {
@@ -38,8 +39,6 @@ export async function getAllTransactions(
 
 export async function deposit(formData: DepositSchema) {
     try {
-        console.log(formData);
-
         const transaction = await prisma.transaction.create({
             data: {
                 amount: formData.amount,
@@ -49,7 +48,28 @@ export async function deposit(formData: DepositSchema) {
             }
         }) as Transaction
 
-        console.log('trans::::', transaction);
+        await increaseBalance(formData.id, formData.amount);
+
+        return { success: true, transaction };
+
+    } catch (error) {
+        console.log(error);
+        return { success: false };
+    }
+}
+
+export async function withdraw(formData: WithdrawSchema) {
+    try {
+        const transaction = await prisma.transaction.create({
+            data: {
+                amount: formData.amount,
+                transactionType: TransactionType.WITHDRAWAL,
+                bankAccountId: formData.id,
+                transactionStatus: TransactionStatus.PENDING,
+            }
+        }) as Transaction
+
+        await decreaseBalance(formData.id, formData.amount);
 
         return { success: true, transaction };
 

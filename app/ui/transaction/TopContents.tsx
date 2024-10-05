@@ -27,6 +27,7 @@ const TopContent = ({ filter, setFilter }: topContentProps) => {
     const [typeFilter, setTypeFilter] = useState<Selection>('all');
     const [startDate, setStartDate] = useState<DateValue>();
     const [endDate, setEndDate] = useState<DateValue>();
+    const [searchValue, setSearchValue] = useState<string>("");
 
     const onFilterChange = (v: any, type: string) => {
         switch (type) {
@@ -51,6 +52,14 @@ const TopContent = ({ filter, setFilter }: topContentProps) => {
         }
     }
 
+    const searchValueChange = (v: any) => {
+        setSearchValue(v);
+        setFilter({ ...filter, transaction_id: { contains: v } })
+    }
+    const clear = () => {
+        setSearchValue("");
+        setFilter({ ...filter, transaction_id: { contains: "" } })
+    }
 
     return (
         <div className="flex flex-col gap-4">
@@ -58,11 +67,11 @@ const TopContent = ({ filter, setFilter }: topContentProps) => {
                 <Input
                     isClearable
                     className="w-full sm:max-w-[44%]"
-                    placeholder="Search by name..."
+                    placeholder="Search by transaction id..."
                     startContent={<FontAwesomeIcon icon={faSearch} />}
-                    value={''}
-                    onClear={() => { }}
-                    onValueChange={() => { }}
+                    value={searchValue}
+                    onClear={clear}
+                    onValueChange={searchValueChange}
                 />
                 <div className="flex gap-3">
                     <DatePicker

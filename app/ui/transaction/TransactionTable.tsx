@@ -4,7 +4,7 @@ import { Transaction, TransactionFilter } from '@/app/types/types'
 import { faBank } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Avatar, Button, Chip, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
-import { TransactionType } from '@prisma/client'
+import { TransactionStatus, TransactionType } from '@prisma/client'
 import { convertToDisplayData } from './common'
 import { useEffect, useMemo, useState } from 'react'
 import { getAllTransactions } from '@/app/lib/actions/transaction-actions'
@@ -23,16 +23,25 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
     switch (columnKey) {
       case "transactionStatus":
         return (
-          <Chip className="capitalize" color={'primary'} size="sm" variant="flat">
+          <Chip
+            className={`capitalize text-white
+              ${cellValue===TransactionStatus.PENDING?'bg-gray-500':
+              cellValue===TransactionStatus.SUCCESS?'bg-success-500':'bg-danger-500'}
+              `}
+            color={'primary'}
+            size="sm"
+            variant="flat">
             {cellValue}
           </Chip>
         );
       case "amount":
+        const ty = item['transactionType'];
         return (
           <p className={`font-semibold w-full
-            ${item['transactionType'] === TransactionType.DEPOSIT.toString() ? 'text-green-500' : ''}`}>
+            ${ty === TransactionType.DEPOSIT ? 'text-green-500' :
+              ty === TransactionType.WITHDRAWAL ? 'text-red-500' : 'text-primary-400'
+            }`}>
             {item['transactionType'] === TransactionType.DEPOSIT.toString() ? '+' : '-'}
-
             {cellValue}
 
           </p>
@@ -52,11 +61,10 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
         );
     }
 
-    const rtn = item[columnKey] ? item[columnKey] : '';
-
-    if (rtn) {
-      return <p className='w-full'>{rtn}</p>;
-    }
+    // const rtn = item[columnKey] ? item[columnKey] : '';
+    // if (rtn) {
+    //   return <p className='w-full'>{rtn}</p>;
+    // }
   }
   const pageSize = 10;
   const [page, setPage] = useState<number>(1);
@@ -106,11 +114,11 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
         </div>
       </div>
     );
-  }, [page, filter,totalPages,totalItm]);
+  }, [page, filter, totalPages, totalItm]);
 
   const top = useMemo(() => {
     return <TopContent filter={filter} setFilter={setFilter} />
-  }, [page,filter,totalPages,totalItm]);
+  }, [page, filter, totalPages, totalItm]);
 
   return (
     <Table

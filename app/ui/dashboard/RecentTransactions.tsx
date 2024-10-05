@@ -4,7 +4,7 @@ import { Transaction } from '@/app/types/types'
 import { faBank } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Chip, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
-import { TransactionType } from '@prisma/client'
+import { TransactionStatus, TransactionType } from '@prisma/client'
 import { convertToDisplayData } from '../transaction/common'
 
 interface recentTransactionProps {
@@ -17,16 +17,25 @@ const RecentTransactions = ({ transactions }: recentTransactionProps) => {
     switch (columnKey) {
       case "transactionStatus":
         return (
-          <Chip className="capitalize" color={'primary'} size="sm" variant="flat">
+          <Chip
+            className={`capitalize text-white
+              ${cellValue === TransactionStatus.PENDING ? 'bg-gray-500' :
+                cellValue === TransactionStatus.SUCCESS ? 'bg-success-500' : 'bg-danger-500'}
+              `}
+            color={'primary'}
+            size="sm"
+            variant="flat">
             {cellValue}
           </Chip>
         );
       case "amount":
+        const ty = item['transactionType'];
         return (
           <p className={`font-semibold w-full
-            ${item['transactionType'] === TransactionType.DEPOSIT.toString() ? 'text-green-500' : ''}`}>
+              ${ty === TransactionType.DEPOSIT ? 'text-green-500' :
+              ty === TransactionType.WITHDRAWAL ? 'text-red-500' : 'text-primary-400'
+            }`}>
             {item['transactionType'] === TransactionType.DEPOSIT.toString() ? '+' : '-'}
-
             {cellValue}
 
           </p>

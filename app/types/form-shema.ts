@@ -70,6 +70,20 @@ export const depositSchema = z.object({
         z.number().gte(1, 'Must be 1 and above'))
 });
 
+export const withdrawSchema = z.object({
+    id: z.preprocess((a) => parseInt(z.string().parse(a), 10),
+        z.number().gte(1, 'Must be 1 and above')),
+    type: z.string().min(1, { message: 'Require' }),
+    account_id: z.string().min(1, { message: "Id is required" }),
+    amount: z.preprocess((a) => parseInt(z.string().parse(a), 10),
+        z.number().gte(1, 'Must be 1 and above')),
+    available: z.preprocess((a) => parseInt(z.string().parse(a), 10),
+        z.number().gte(0, 'Must be 0 and above')),
+}).refine((data) => data.amount <= data.available, {
+    message: 'Amount cannot be greater than available balance',
+    path: ['amount'],
+});
+
 export type SignUpSchema = z.infer<typeof signupSchema>;
 
 export type SignInSchema = z.infer<typeof signInSchema>;
@@ -79,3 +93,5 @@ export type BankAccountSchema = z.infer<typeof bankAccountSchema>
 export type ProfileSchema = z.infer<typeof profileShema>
 
 export type DepositSchema = z.infer<typeof depositSchema>
+
+export type WithdrawSchema = z.infer<typeof withdrawSchema>

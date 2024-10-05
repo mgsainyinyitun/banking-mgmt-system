@@ -32,20 +32,21 @@ model User {
 }
 
 model BankAccount {
-  id               Int             @id @default(autoincrement())
-  account_name     String
-  accountNumber    String          @unique @db.Char(36) // 16 digit account number
-  accountType      BankAccountType
-  balance          Float           @default(0.0)
-  availableBalance Float           @default(0.0)
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  User             User            @relation(fields: [userId], references: [id])
-  userId           String          @db.Char(36)
-  accountOpenedAt  DateTime        @default(now())
-  accountClosedAt  DateTime?
-  accountStatus    AccountStatus   @default(ACTIVE)
-  Transaction      Transaction[]
+  id                   Int                    @id @default(autoincrement())
+  account_name         String
+  accountNumber        String                 @unique @db.Char(36) // 16 digit account number
+  accountType          BankAccountType
+  balance              Float                  @default(0.0)
+  availableBalance     Float                  @default(0.0)
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  User                 User                   @relation(fields: [userId], references: [id])
+  userId               String                 @db.Char(36)
+  accountOpenedAt      DateTime               @default(now())
+  accountClosedAt      DateTime?
+  accountStatus        AccountStatus          @default(ACTIVE)
+  Transaction          Transaction[]
+  MonthlyBalanceRecord MonthlyBalanceRecord[]
 }
 
 model Transaction {
@@ -60,6 +61,19 @@ model Transaction {
   transactionStatus TransactionStatus @default(PENDING)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
+}
+
+model MonthlyBalanceRecord {
+  id            Int         @id @default(autoincrement())
+  month         Int
+  year          Int
+  balance       Float
+  bankAccountId Int
+  BankAccount   BankAccount @relation(fields: [bankAccountId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([month, year, bankAccountId]) // Ensure unique record for each month/year/account combination
 }
 
 enum AccountStatus {

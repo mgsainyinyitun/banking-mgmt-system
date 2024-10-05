@@ -3,6 +3,7 @@ import { BankAccountSchema } from "@/app/types/form-shema";
 import prisma from "../prisma";
 import { Bank } from "@/app/types/types";
 import { ACCOUNT_TYPE } from "@prisma/client";
+import { updateOrCreateMonthlyBalance } from "./monthly-balance-action";
 
 export async function getBankAccounts(id: string | undefined): Promise<Bank[] | undefined> {
     try {
@@ -56,6 +57,53 @@ export async function createBankAccount(formData: BankAccountSchema) {
         return { success: false };
     }
 }
+
+
+export async function increaseBalance(id: number, amount: number) {
+    try {
+        await prisma.bankAccount.update({
+            where: {
+                id: id,
+            },
+            data: {
+                balance: {
+                    increment: amount,
+                },
+            },
+        });
+        await updateOrCreateMonthlyBalance(id, amount, true);
+        return { success: true };
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function decreaseBalance(id: number, amount: number) {
+    try {
+        await prisma.bankAccount.update({
+            where: {
+                id: id,
+            },
+            data: {
+                balance: {
+                    decrement: amount,
+                },
+            },
+        });
+        await updateOrCreateMonthlyBalance(id, amount, false);
+        return { success: true };
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
+
+
+
+
+
 
 function generateAccountNumber(): string {
     return Math.floor(1000000000000000 + Math.random() * 9000000000000000).toString();

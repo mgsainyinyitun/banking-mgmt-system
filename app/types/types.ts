@@ -49,7 +49,7 @@ export type Transaction = {
 }
 
 export type TransactionFilter = {
-    transaction_id?: string,
+    transaction_id?: any,
     transactionType?: any,
     date?: any,
     bankAccountId?: number,
