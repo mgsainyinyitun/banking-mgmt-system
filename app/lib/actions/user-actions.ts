@@ -9,10 +9,9 @@ import { getFileExtension } from "../utils";
 import fs from 'fs';
 
 
-export async function uploadProfile(data: any, id: string | undefined, route: string, imageUrl: string | undefined) {
+export async function uploadProfile(data: FormData, id: string | undefined, route: string, imageUrl: string | undefined) {
     if (!id) return;
     const image = data.get("file") as File || null;
-    console.log('file is :', image)
     if (!image) {
         throw new Error('No file uploaded');
     }
@@ -22,7 +21,8 @@ export async function uploadProfile(data: any, id: string | undefined, route: st
 
     try {
         await stat(uploadDir);
-    } catch (e: any) {
+    } catch (error) {
+        const e = error as NodeJS.ErrnoException;
         if (e.code === "ENOENT") {
             await mkdir(uploadDir, { recursive: true });
         } else {
@@ -36,10 +36,7 @@ export async function uploadProfile(data: any, id: string | undefined, route: st
     try {
         const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
         const filename = `${id}_${uniqueSuffix}.${getFileExtension(image.type)}`;
-
-        console.log('filename=>', filename);
-
-        await writeFile(`${uploadDir}/${filename}`, buffer as any);
+        await writeFile(`${uploadDir}/${filename}`, buffer as NodeJS.ArrayBufferView);
         const fileUrl = `${relativeUploadDir}${filename}`;
 
         // Save to database
@@ -51,10 +48,10 @@ export async function uploadProfile(data: any, id: string | undefined, route: st
         });
         if (imageUrl) {
             const uploadDir = join(process.cwd(), "public");
-            const imagePath = path.join(uploadDir,imageUrl);
+            const imagePath = path.join(uploadDir, imageUrl);
             if (fs.existsSync(imagePath)) {
                 fs.unlinkSync(imagePath); // Delete the file
-                console.log(`Deleted file at: ${imagePath}`);
+
             } else {
                 console.warn('File does not exist, skipping delete.');
             }
@@ -80,8 +77,26 @@ export async function getUser(id: string | undefined): Promise<User | undefined>
     }
 }
 
+export async function getUserProfileLink(id: string): Promise<string | undefined> {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id },
+            select: { profileImage: true }
+        });
+
+        if (!user) {
+            return undefined;
+        }
+        return user.profileImage ? user.profileImage : undefined;
+
+    } catch (error) {
+        console.log(error);
+        return undefined
+    }
+}
+
+
 export async function updateUser(formData: ProfileSchema, route: string): Promise<{ success: boolean, user?: User, message?: string }> {
-    console.log('to update:', formData);
     const id = formData.id;
     try {
         const user = await prisma.user.update({

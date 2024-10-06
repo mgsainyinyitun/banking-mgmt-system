@@ -31,7 +31,7 @@ const ProfilePic = ({ id, imageUrl }: profilePicProps) => {
         e.preventDefault();
         if (!file) return;
 
-        const formData = new FormData();
+        const formData: FormData = new FormData();
         formData.append('file', file);
 
         const res = await uploadProfile(formData, id, 'cu/dashboard/profile', imageUrl);
@@ -39,8 +39,8 @@ const ProfilePic = ({ id, imageUrl }: profilePicProps) => {
             toast.success(res.message);
         }
         if (!res?.success) {
-            res &&
-                toast.error(res.message);
+            const msg = res?.message ? res.message : 'Something went wrong';
+            toast.error(msg);
         }
         setChange(false);
         setPreview(null);

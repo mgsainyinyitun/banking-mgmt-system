@@ -11,8 +11,9 @@ import FormDate from '../ui/components/form/FormDate';
 import toast, { Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const SignIn = () => {
     const { theme } = useTheme();
@@ -41,21 +42,30 @@ const SignIn = () => {
     }
 
     return (
-        <div className={`flex h-screen justify-center w-full ${usertheme === 'light' ? 'bg-gradient-radial-circle from-pink-400 to-cyan-300' : 'bbg-gray-500'}`}>
+        <div className={`flex h-screen justify-center w-full`}>
             <Toaster />
             <div className='w-full overflow-auto'>
                 <div className='flex justify-center'>
                     <form
                         onSubmit={handleSubmit(onSubmitForm)}
-                        className='bg-content1-900 m-5 w-full md:w-[50%] lg:w-[35%] rounded-xl p-4 flex flex-col gap-5'>
-                        <h1 className='text-4xl text-blue-500 font-semibold'>Register Account</h1>
+                        className='bg-white m-5 w-full md:w-[50%] lg:w-[40%] rounded-xl p-4 flex flex-col gap-5'>
 
-                        <div className='flex flex-col justify-center bg-sky-300 p-3 rounded-2xl my-5 text-blue-700'>
+                        <div className='flex gap-3 items-center justify-center'>
+                            <Image src={"/icons/zai-logo.png"} alt='zai-logo' width={100} height={100} />
+                            <h1 className='text-6xl font-bold text-primary-400'>ZAI</h1>
+                        </div>
+
+                        <div className='flex flex-col gap-3'>
+                            <h1 className='text-3xl text-blue-500 font-semibold'>Register Account</h1>
+                            <p className='text-gray-500 mb-3'>Please Enter Your Details</p>
+                        </div>
+
+                        {/* <div className='flex flex-col justify-center bg-sky-300 p-3 rounded-2xl my-5 text-blue-700'>
                             <h3>Already Have an Account?</h3>
                             <Link href="/sign-in" >
                                 Sign In
                             </Link>
-                        </div>
+                        </div> */}
 
                         <FormInput
                             register={register}
@@ -82,7 +92,10 @@ const SignIn = () => {
                             label='Date of Birth'
                             name={'dob'}
                             error={errors.dob?.message}
-                            setValue={(f: any, v: any) => setValue(f, v)}
+                            setValue={(f, v) => {
+                                console.log(f);
+                                setValue('dob', v);
+                            }}
                         />
                         <div className='flex gap-2'>
                             <FormInput
@@ -154,6 +167,8 @@ const SignIn = () => {
                         <Button radius='sm' color='primary' size="lg" type='submit' isLoading={isSubmitting}>
                             {isSubmitting ? 'Loading...' : 'SIGN UP'}
                         </Button>
+
+                        <p className='text-center text-gray-500'>Already have an account? <Link href="/sign-in" className='text-blue-500'>Sign In</Link></p>
                     </form>
                 </div>
             </div>

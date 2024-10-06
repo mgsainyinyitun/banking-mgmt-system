@@ -1,14 +1,12 @@
 'use client'
-import { DEFAULT_PROFILE, TRANSACTION_COLUMNS } from '@/app/constants/CONSTANTS'
+import { TRANSACTION_COLUMNS } from '@/app/constants/CONSTANTS'
 import { Transaction, TransactionFilter } from '@/app/types/types'
-import { faBank } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Avatar, Button, Chip, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
-import { TransactionStatus, TransactionType } from '@prisma/client'
+import { Button, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { convertToDisplayData } from './common'
 import { useEffect, useMemo, useState } from 'react'
 import { getAllTransactions } from '@/app/lib/actions/transaction-actions'
 import TopContent from './TopContents'
+import { renderCell } from './RenderCell'
 
 interface transactionTableProps {
   transactions: Transaction[] | undefined,
@@ -17,55 +15,6 @@ interface transactionTableProps {
 }
 
 const TransactionTable = ({ transactions, total, id }: transactionTableProps) => {
-
-  const renderCell = (columnKey: any, item: any) => {
-    const cellValue = item[columnKey] ? item[columnKey] : '';
-    switch (columnKey) {
-      case "transactionStatus":
-        return (
-          <Chip
-            className={`capitalize text-white
-              ${cellValue===TransactionStatus.PENDING?'bg-gray-500':
-              cellValue===TransactionStatus.SUCCESS?'bg-success-500':'bg-danger-500'}
-              `}
-            color={'primary'}
-            size="sm"
-            variant="flat">
-            {cellValue}
-          </Chip>
-        );
-      case "amount":
-        const ty = item['transactionType'];
-        return (
-          <p className={`font-semibold w-full
-            ${ty === TransactionType.DEPOSIT ? 'text-green-500' :
-              ty === TransactionType.WITHDRAWAL ? 'text-red-500' : 'text-primary-400'
-            }`}>
-            {item['transactionType'] === TransactionType.DEPOSIT.toString() ? '+' : '-'}
-            {cellValue}
-
-          </p>
-        );
-      case "transaction_id":
-        return (
-          <p className='text-center'>
-            {cellValue}
-          </p>
-        );
-
-      case "account":
-        return (
-          <p className='text-center'>
-            <FontAwesomeIcon icon={faBank} className='text-primary-400 border-1 border-primary-500 p-3 rounded-full' />
-          </p>
-        );
-    }
-
-    // const rtn = item[columnKey] ? item[columnKey] : '';
-    // if (rtn) {
-    //   return <p className='w-full'>{rtn}</p>;
-    // }
-  }
   const pageSize = 10;
   const [page, setPage] = useState<number>(1);
   const [totalItm, setTotalItem] = useState(total);
@@ -73,15 +22,12 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
   const [filter, setFilter] = useState<TransactionFilter>({});
   const [dbtransactions, setTransactions] = useState(transactions);
 
-
-  // let totalPages = total ? Math.ceil(total / pageSize) : 1;
-
   const refetch = async () => {
     const res = await getAllTransactions(id, filter, pageSize, page, pageSize);
     if (res?.success) {
       setTransactions(res.transactions);
-      res.total && setTotalPages(Math.ceil(res.total / pageSize));
-      res.total && setTotalItem(res.total);
+      setTotalPages(res.total ? Math.ceil(res?.total / pageSize) : totalPages);
+      setTotalItem(res.total);
     }
   }
 
@@ -114,11 +60,11 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
         </div>
       </div>
     );
-  }, [page, filter, totalPages, totalItm]);
+  }, [page, totalPages, totalItm]);
 
   const top = useMemo(() => {
     return <TopContent filter={filter} setFilter={setFilter} />
-  }, [page, filter, totalPages, totalItm]);
+  }, [filter]);
 
   return (
     <Table
@@ -143,7 +89,7 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
         {
           (item) => (
             <TableRow key={item.id}>
-              {(columnKey) => <TableCell>{renderCell(columnKey, item)}</TableCell>}
+              {(columnKey) => <TableCell>{renderCell({ columnKey, item })}</TableCell>}
             </TableRow>
           )
         }

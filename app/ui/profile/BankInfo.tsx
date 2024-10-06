@@ -10,8 +10,7 @@ interface bankInfoProps {
 }
 
 const BankInfo = ({ bank }: bankInfoProps) => {
-    console.log('bank is : ', bank[0]);
-    const bankInfo = bank[0];
+    const bankInfo = bank[0] ? bank[0] : [] as Bank;
 
     return (
         <div className="flex flex-col gap-5 p-5 bg-content1-900 rounded-2xl w-full md:w-2/3 mx-auto h-full">

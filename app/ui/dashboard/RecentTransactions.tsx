@@ -1,60 +1,16 @@
 'use client'
 import { TRANSACTION_COLUMNS } from '@/app/constants/CONSTANTS'
 import { Transaction } from '@/app/types/types'
-import { faBank } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Chip, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
-import { TransactionStatus, TransactionType } from '@prisma/client'
+import {  Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { convertToDisplayData } from '../transaction/common'
+import { renderCell } from '../transaction/RenderCell'
 
 interface recentTransactionProps {
   transactions: Transaction[] | undefined
 }
 
 const RecentTransactions = ({ transactions }: recentTransactionProps) => {
-  const renderCell = (columnKey: any, item: any) => {
-    const cellValue = item[columnKey] ? item[columnKey] : '';
-    switch (columnKey) {
-      case "transactionStatus":
-        return (
-          <Chip
-            className={`capitalize text-white
-              ${cellValue === TransactionStatus.PENDING ? 'bg-gray-500' :
-                cellValue === TransactionStatus.SUCCESS ? 'bg-success-500' : 'bg-danger-500'}
-              `}
-            color={'primary'}
-            size="sm"
-            variant="flat">
-            {cellValue}
-          </Chip>
-        );
-      case "amount":
-        const ty = item['transactionType'];
-        return (
-          <p className={`font-semibold w-full
-              ${ty === TransactionType.DEPOSIT ? 'text-green-500' :
-              ty === TransactionType.WITHDRAWAL ? 'text-red-500' : 'text-primary-400'
-            }`}>
-            {item['transactionType'] === TransactionType.DEPOSIT.toString() ? '+' : '-'}
-            {cellValue}
-
-          </p>
-        );
-      case "transaction_id":
-        return (
-          <p className='text-center'>
-            {cellValue}
-          </p>
-        );
-
-      case "account":
-        return (
-          <p className='text-center'>
-            <FontAwesomeIcon icon={faBank} className='text-primary-400 border-1 border-primary-500 p-3 rounded-full' />
-          </p>
-        );
-    }
-  }
+  
   return (
     <Table className='h-full w-full bg-content1-900 p-3 rounded-2xl overflow-auto' removeWrapper>
       <TableHeader columns={TRANSACTION_COLUMNS}>
@@ -71,7 +27,7 @@ const RecentTransactions = ({ transactions }: recentTransactionProps) => {
         {
           (item) => (
             <TableRow key={item.id}>
-              {(columnKey) => <TableCell>{renderCell(columnKey, item)}</TableCell>}
+              {(columnKey) => <TableCell>{renderCell({columnKey, item})}</TableCell>}
             </TableRow>
           )
         }

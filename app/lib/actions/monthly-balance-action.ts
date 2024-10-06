@@ -10,7 +10,6 @@ export async function getMonthlyBalances(bankAccountId: number) {
             month: 'asc'
         },
     });
-    console.log('monthlyBalances', monthlyBalances);
     return monthlyBalances;
 }
 

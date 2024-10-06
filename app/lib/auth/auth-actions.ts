@@ -10,7 +10,6 @@ import { redirect } from "next/navigation";
 
 export async function signUp(formData: SignUpSchema) {
     try {
-        console.log('create user,:',formData)
         const hashedPassword = await bcrypt.hash(formData.password, 10);
         const user = await prisma.user.create({
             data: {

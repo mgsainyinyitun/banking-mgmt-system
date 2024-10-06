@@ -1,17 +1,16 @@
-import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Input } from '@nextui-org/react';
-import React, { useState } from 'react'
+import React from 'react'
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
-interface formPassProps {
+interface formPassProps<T extends FieldValues> {
     label: string,
     placeholder: string,
-    name: string,
+    name: Path<T>,
     error: string | undefined,
-    register:any
+    register: UseFormRegister<T>
 }
 
-const FormPassword = ({ label, placeholder, name, error,register }: formPassProps) => {
+const FormPassword = <T extends FieldValues>({ label, placeholder, name, error, register }: formPassProps<T>) => {
     // const [isVisible, setIsVisible] = useState(false);
     // const toggleVisibility = () => setIsVisible(!isVisible);
     return (

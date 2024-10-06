@@ -1,11 +1,11 @@
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, SharedSelection } from '@nextui-org/react'
 
 interface multiDropProps {
-    items: any[],
-    filter: any | 'all',
-    onFilterChange: (v:any, name: string) => void,
+    items: [],
+    filter: undefined | 'all' | string | SharedSelection,
+    onFilterChange: (v: SharedSelection, name: string) => void,
     name: string,
 }
 
@@ -24,9 +24,12 @@ const MutlipleDropdown = ({ items, filter, onFilterChange, name }: multiDropProp
                 closeOnSelect={false}
                 selectedKeys={filter}
                 selectionMode="multiple"
-                onSelectionChange={(v: any) => onFilterChange(v, name)}
+                onSelectionChange={(v) => {
+                    console.log(Array.of(v) as string[])
+                    onFilterChange(v, name)
+                }}
             >
-                {items.map((status: any) => (
+                {items.map((status: { uid: string; name: string }) => (
                     <DropdownItem key={status.uid} className="capitalize">
                         {status.name}
                     </DropdownItem>

@@ -37,7 +37,6 @@ const BankAccountForm = ({ userId }: bankAccountFormProps) => {
     const router = useRouter();
     const onSubmitForm = async (data: BankAccountSchema
     ) => {
-        console.log(data);
         const res = await createBankAccount(data);
         if (res.success) {
             toast.success('Successfully created Bank Account.')

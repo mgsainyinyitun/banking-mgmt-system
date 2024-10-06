@@ -1,48 +1,52 @@
 'use client'
-import { deposit } from '@/app/lib/actions/transaction-actions';
+import { getToAccountInfo } from '@/app/lib/actions/bank-actions';
+import { transfer } from '@/app/lib/actions/transaction-actions';
 import { formatNumberToGroupsOfFour } from '@/app/lib/utils';
-import { depositSchema, DepositSchema } from '@/app/types/form-shema';
+import { transferSchema, TransferSchema } from '@/app/types/form-shema';
 import { Bank, Transaction } from '@/app/types/types';
 import FormStepper from '@/app/ui/components/common/FormStepper';
 import ResponsiveFormWraper from '@/app/ui/components/common/ResponsiveFormWraper'
 import FormInput from '@/app/ui/components/form/FormInput';
-import { faArrowLeft, faBank, faHome, faMoneyBill, faStarHalfStroke } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faBank, faHome, faMoneyBill, faMoneyBillTransfer } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input, Select, SelectItem } from '@nextui-org/react';
+import { Button, Input } from '@nextui-org/react';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
-const trType = [
-    {
-        name: 'ZAI BANK',
-        value: 'zai_bank'
-    },
-]
+import toast, { Toaster } from 'react-hot-toast';
 
-interface depositProps {
+interface transferFormProps {
     bank: Bank | undefined
 }
 
-const DepositForm = ({ bank }: depositProps) => {
-    const { register, handleSubmit, formState: { errors, isSubmitting }, getValues } = useForm<DepositSchema>({
-        resolver: zodResolver(depositSchema),
+const TransferForm = ({ bank }: transferFormProps) => {
+    const { register, handleSubmit, formState: { errors, isSubmitting }, getValues } = useForm<TransferSchema>({
+        resolver: zodResolver(transferSchema),
     });
 
     const [state, setState] = useState<number>(1);
     const [tran, setTran] = useState<Transaction | undefined>();
+    const [toAcc, setToAcc] = useState<Bank>();
 
     const onBackClick = () => {
         setState(state - 1);
     }
-    const onSubmitForm = async (data: DepositSchema) => {
+    const onSubmitForm = async (data: TransferSchema) => {
         switch (state) {
-            case 1: { setState(2); break }
-            case 2: {
-                const res = await deposit(data);
+            case 1: {
+                const res = await getToAccountInfo(data.to_account_id);
                 if (res.success) {
-                    toast.success('Successfully Deposit into your Account!')
+                    setToAcc(res.toAccount ? res.toAccount : undefined);
+                    setState(2);
+                } else {
+                    toast.error(res.error ? res.error : 'Something went Wrong! Please Try again later');
+                }
+                break;
+            }
+            case 2: {
+                const res = await transfer(data);
+                if (res.success) {
                     setTran(res.transaction);
                     setState(3);
                 } else {
@@ -56,30 +60,23 @@ const DepositForm = ({ bank }: depositProps) => {
 
     return (
         <Fragment>
+            <Toaster />
             <FormStepper active={state - 1} type='T' />
             {state === 1 && (
                 <Fragment>
                     <ResponsiveFormWraper onSubmit={handleSubmit(onSubmitForm)}>
                         <input type='hidden' value={bank?.id} {...register('id')} />
-                        <Select
-                            label="Select Deposit To"
-                            labelPlacement='outside'
-                            isRequired={true}
-                            radius='sm'
-                            size='lg'
-                            placeholder='Deposit to'
-                            {...register('type')}
-                            startContent={<FontAwesomeIcon icon={faStarHalfStroke} className='text-sky-400' />}
-                        >
-                            {trType.map((itm) => (
-                                <SelectItem key={itm.value}>
-                                    {itm.name}
-                                </SelectItem>
-                            ))}
-                        </Select>
                         <FormInput
                             register={register}
-                            label='Account Number'
+                            label='Transfer Account Number'
+                            type='text'
+                            icon={faMoneyBillTransfer}
+                            name={'to_account_id'}
+                            error={errors.to_account_id?.message}
+                        />
+                        <FormInput
+                            register={register}
+                            label='Your Account Number'
                             type='text'
                             icon={faBank}
                             name={'account_id'}
@@ -94,6 +91,8 @@ const DepositForm = ({ bank }: depositProps) => {
                             name={'amount'}
                             error={errors.amount?.message}
                         />
+                        <input type='hidden' value={bank?.balance} {...register('available')} />
+                        <h3 className='text-gray-400'>Available Balance : {bank?.balance} mmk</h3>
 
                         <Button radius='sm' color='primary' size="lg" type='submit' isLoading={isSubmitting}>
                             {isSubmitting ? 'Loading...' : 'NEXT'}
@@ -108,15 +107,25 @@ const DepositForm = ({ bank }: depositProps) => {
 
                         <ResponsiveFormWraper onSubmit={handleSubmit(onSubmitForm)}>
                             <div className='flex justify-center items-center w-full'>
-                                <h3 className='text-primary-400 text-2xl text-center'>Please Confirm Your Deposit Information</h3>
+                                <h3 className='text-primary-400 text-2xl text-center'>Please Confirm Your Transfer Information</h3>
                             </div>
 
                             <Input
-                                value={getValues('type')}
+                                value={(toAcc?.account_name)}
                                 isReadOnly
                                 radius='sm'
                                 size='lg'
-                                label='Deposite To'
+                                label='Trasfer To Account Name'
+                                labelPlacement="outside"
+                                isDisabled
+                            />
+
+                            <Input
+                                value={formatNumberToGroupsOfFour(getValues('to_account_id'))}
+                                isReadOnly
+                                radius='sm'
+                                size='lg'
+                                label='Transfer To Account ID'
                                 labelPlacement="outside"
                                 isDisabled
                             />
@@ -136,7 +145,7 @@ const DepositForm = ({ bank }: depositProps) => {
                                 isReadOnly
                                 radius='sm'
                                 size='lg'
-                                label='Deposit Amount'
+                                label='Transfer Amount'
                                 labelPlacement="outside"
                                 isDisabled
                             />
@@ -162,7 +171,7 @@ const DepositForm = ({ bank }: depositProps) => {
                     <Fragment>
                         <ResponsiveFormWraper onSubmit={handleSubmit(onSubmitForm)}>
                             <div className='justify-center items-center w-full flex flex-col bg-green-200 p-3 rounded-2xl text-white'>
-                                <h3 className='text-2xl text-center text-primary-400'>Successfully Deposite Into Account</h3>
+                                <h3 className='text-2xl text-center text-primary-400'>Successfully withdraw from your Account</h3>
                                 <h4 className='mt-3 text-center text-gray-500'>Please wait Banking Admin to Approve Your Request</h4>
                             </div>
 
@@ -223,4 +232,4 @@ const DepositForm = ({ bank }: depositProps) => {
     )
 }
 
-export default DepositForm
+export default TransferForm

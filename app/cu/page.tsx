@@ -6,13 +6,12 @@ import { Bank } from "../types/types";
 
 const page = async () => {
   const session = await auth();
-  let id = session?.user?.id;
+  const id = session?.user?.id;
 
   if (id) {
     const banks: Bank[] = await getBankAccounts(id) as Bank[];
-    console.log('banks is:', banks);
     if (banks.length !== 0) {
-      redirect('cu/dashboard')
+      redirect('/cu/dashboard')
     }
   }
 

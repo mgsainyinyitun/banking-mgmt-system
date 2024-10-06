@@ -8,7 +8,6 @@ import { signInSchema } from './app/types/form-shema';
 
 async function getUser(email: string): Promise<User | undefined> {
     try {
-        console.log('unique use finding ...');
         const user = await prisma.user.findUnique({ where: { email } }) as User | null;
         if (!user) return undefined;
         return user;
@@ -34,7 +33,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
                     const passwordsMatch = await bcrypt.compare(password, user.password);
                     if (passwordsMatch) {
-                        console.log('returne user');
                         return user
                     } else {
                         console.log('Invalid credentials');
@@ -57,7 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 }
                 token.user = usr;
             }
-            console.log('token is :::', token)
+            // console.log('token is :::', token)
             return token;
         },
         async session({ session, token }) {

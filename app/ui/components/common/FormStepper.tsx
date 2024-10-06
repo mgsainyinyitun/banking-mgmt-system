@@ -16,16 +16,13 @@ interface formStepperProps {
 const FormStepper = ({ active, type }: formStepperProps) => {
     const renderSteper = () => {
         switch (type) {
-            case 'T': return transaction.map(i => <Step label={i} />)
+            case 'T': return transaction.map(i => <Step key={i} label={i} />)
             default: return null;
         }
     }
     return (
         <Stepper activeStep={active}>
             {renderSteper()}
-            {/* <Step label="Children Step 1" />
-            <Step label="Children Step 2" />
-            <Step label="Children Step 3" /> */}
         </Stepper>
     );
 }

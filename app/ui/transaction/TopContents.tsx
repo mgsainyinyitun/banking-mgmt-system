@@ -2,7 +2,7 @@
 import { TransactionFilter } from "@/app/types/types";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DatePicker, DateValue, Input, Selection } from "@nextui-org/react";
+import { DatePicker, DateValue, Input, Selection, SharedSelection } from "@nextui-org/react";
 import { TransactionStatus, TransactionType } from "@prisma/client";
 import { useState } from "react";
 import MutlipleDropdown from "../components/common/MutlipleDropdown";
@@ -29,30 +29,37 @@ const TopContent = ({ filter, setFilter }: topContentProps) => {
     const [endDate, setEndDate] = useState<DateValue>();
     const [searchValue, setSearchValue] = useState<string>("");
 
-    const onFilterChange = (v: any, type: string) => {
+    const onFilterChange = (v: SharedSelection, type: string) => {
         switch (type) {
             case "STATUS":
                 setStatusFilter(v);
-                const starr = Array.from(v) ? Array.from(v) : [];
-                setFilter({ ...filter, transactionStatus: { in: starr } })
+                const starr: string[] = Array.from(v) ? Array.from(v) as string[] : [];
+                setFilter({ ...filter, transactionStatus: { in: starr as TransactionStatus[] } })
                 break;
             case "TYPE":
                 setTypeFilter(v);
-                const tyarr = Array.from(v) ? Array.from(v) : [];
-                setFilter({ ...filter, transactionType: { in: tyarr } })
-                break;
-            case "TO":
-                setEndDate(v);
-                setFilter({ ...filter, date: { lte: v.toDate() } })
-                break;
-            case "FROM":
-                setStartDate(v);
-                setFilter({ ...filter, date: { gte: v.toDate() } })
+                const tyarr: string[] = Array.from(v) ? Array.from(v) as string[] : [];
+                setFilter({ ...filter, transactionType: { in: tyarr as TransactionType[] } })
                 break;
         }
     }
 
-    const searchValueChange = (v: any) => {
+    const onFilterDateChange = (v: DateValue, type: string) => {
+        const jsDate = new Date(v.year, v.month - 1, v.day);
+        switch (type) {
+            case "TO":
+                setEndDate(v);
+                setFilter({ ...filter, date: { lte: jsDate, gte: filter.date?.gte } })
+                break;
+            case "FROM":
+                setStartDate(v);
+                setFilter({ ...filter, date: { gte: jsDate, lte: filter.date?.lte } })
+                break;
+        }
+    }
+
+
+    const searchValueChange = (v: string) => {
         setSearchValue(v);
         setFilter({ ...filter, transaction_id: { contains: v } })
     }
@@ -79,26 +86,28 @@ const TopContent = ({ filter, setFilter }: topContentProps) => {
                         className="max-w-[284px]"
                         labelPlacement="outside-left"
                         value={startDate}
-                        onChange={(v: any) => onFilterChange(v, 'FROM')}
+                        onChange={(v: DateValue) => {
+                            onFilterDateChange(v, 'FROM')
+                        }}
                     />
                     <DatePicker
                         label='To'
                         className="max-w-[284px]"
                         labelPlacement="outside-left"
                         value={endDate}
-                        onChange={(v: any) => onFilterChange(v, 'TO')}
+                        onChange={(v) => onFilterDateChange(v, 'TO')}
                     />
 
                     <MutlipleDropdown
                         filter={statusFilter}
                         onFilterChange={onFilterChange}
-                        items={status_arr}
+                        items={status_arr as []}
                         name="STATUS"
                     />
                     <MutlipleDropdown
                         filter={typeFilter}
                         onFilterChange={onFilterChange}
-                        items={type_arr}
+                        items={type_arr as []}
                         name="TYPE"
                     />
 

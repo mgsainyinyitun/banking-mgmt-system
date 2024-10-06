@@ -6,6 +6,7 @@ import BankInfo from '@/app/ui/profile/BankInfo';
 import ProfileInfo from '@/app/ui/profile/ProfileInfo';
 import ProfilePic from '@/app/ui/profile/ProfilePic';
 import { auth } from '@/auth'
+import { redirect } from 'next/navigation';
 import React, { Suspense } from 'react'
 
 const Profile = async () => {
@@ -15,8 +16,9 @@ const Profile = async () => {
     const [user, bank] = await Promise.all([
         getUser(session?.user?.id),
         getBankAccounts(session?.user?.id),
-    ])
+    ]);
 
+    if ((bank as Bank[]).length === 0) redirect('/cu');
 
     return (
         <Suspense fallback={<Loading />}>

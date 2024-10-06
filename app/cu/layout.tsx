@@ -17,14 +17,14 @@ export default async function DashboardLayout({
     return (
         <section className="flex flex-col h-screen bg-gradient-radial-circle from-pink-400 to-cyan-300">
             <div className="flex p-2 h-full gap-2">
-                <LeftSideBar user={user}/>
+                <LeftSideBar user={user} />
                 <section className='w-full bg-content1-900 rounded-2xl flex flex-col h-full overflow-hidden'>
                     <div>
                         <AppBar user={user} />
                     </div>
                     {children}
                 </section>
-                <RightSideBar user={user}/>
+                <RightSideBar user={user} />
             </div>
         </section>
     );

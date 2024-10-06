@@ -1,9 +1,9 @@
 'use server'
-import { DepositSchema, WithdrawSchema } from "@/app/types/form-shema";
+import { DepositSchema, TransferSchema, WithdrawSchema } from "@/app/types/form-shema";
 import prisma from "../prisma";
-import { TransactionStatus, TransactionType } from "@prisma/client";
+import { TransactionStatus, TransactionType, TransferType } from "@prisma/client";
 import { Transaction, TransactionFilter } from "@/app/types/types";
-import { decreaseBalance, increaseBalance } from "./bank-actions";
+import { decreaseBalance, getToAccountInfo, increaseActualBallance, increaseBalance } from "./bank-actions";
 
 export async function getAllTransactions(
     id: number | undefined, filter: TransactionFilter = {}, count?: number, page?: number, pageSize?: number) {
@@ -11,23 +11,37 @@ export async function getAllTransactions(
     try {
         let skip = undefined;
         if (page && pageSize) {
-            skip = (page - 1) * pageSize; // 1, 10,
+            skip = (page - 1) * pageSize;
         }
 
+        filter.bankAccountId = id;
         const [transactions, total] = await prisma.$transaction([
             prisma.transaction.findMany({
-                where: { ...filter },
+                where: filter,
                 orderBy: {
                     createdAt: 'desc'
+                },
+                include: {
+                    transferAccount: {
+                        include: {
+                            User: true,
+                        }
+                    }
                 },
                 skip,
                 take: count || undefined
             }),
             prisma.transaction.count({
-                where: { ...filter }
+                where: filter
             })
         ]);
         const trans = transactions as Transaction[];
+
+        transactions.forEach(tr => {
+            const t = tr as Transaction;
+            t.transferAccountProfile = tr.transferAccount?.User?.profileImage || undefined;
+        })
+
         return { success: true, transactions: trans, total };
 
     } catch (error) {
@@ -72,6 +86,68 @@ export async function withdraw(formData: WithdrawSchema) {
         await decreaseBalance(formData.id, formData.amount);
 
         return { success: true, transaction };
+
+    } catch (error) {
+        console.log(error);
+        return { success: false };
+    }
+}
+
+
+export async function transfer(formData: TransferSchema) {
+
+    try {
+
+        const { success, toAccount } = await getToAccountInfo(formData.to_account_id);
+        if (!success && !toAccount) return { success: false };
+
+        const to_acc_id = toAccount?.id;
+        if (!to_acc_id) return { success: false };
+
+        const [tran_own, tran_recv] = await prisma.$transaction([
+            prisma.transaction.create({
+                data: {
+                    amount: formData.amount,
+                    transactionType: TransactionType.TRANSFER,
+                    bankAccountId: formData.id,
+                    transferAccountId: to_acc_id,
+                    transactionStatus: TransactionStatus.PENDING,
+                    transferType: TransferType.CASHOUT,
+                }
+            }),
+            prisma.transaction.create({
+                data: {
+                    amount: formData.amount,
+                    transactionType: TransactionType.TRANSFER,
+                    bankAccountId: to_acc_id,
+                    transferAccountId: formData.id,
+                    transactionStatus: TransactionStatus.PENDING,
+                    transferType: TransferType.CASHIN,
+                }
+            })
+        ]);
+
+        await decreaseBalance(formData.id, formData.amount);
+        await increaseBalance(to_acc_id, formData.amount);
+        await increaseActualBallance(to_acc_id, formData.amount);
+
+        const [tran_own_success, tran_rec_success] = await prisma.$transaction([
+            prisma.transaction.update({
+                where: { id: tran_own.id },
+                data: {
+                    transactionStatus: TransactionStatus.SUCCESS
+                }
+            }),
+            prisma.transaction.update({
+                where: { id: tran_recv.id },
+                data: {
+                    transactionStatus: TransactionStatus.SUCCESS
+                }
+            }),
+        ]);
+
+        const rtrn = tran_own_success as Transaction;
+        return { success: true, transaction: rtrn, rec_id: tran_rec_success.bankAccountId };
 
     } catch (error) {
         console.log(error);

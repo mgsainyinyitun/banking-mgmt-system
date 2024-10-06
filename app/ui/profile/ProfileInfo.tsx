@@ -26,7 +26,7 @@ const ProfileInfo = ({ user }: profileInfoProps) => {
 
     const [change, setChange] = useState(false);
     const onSubmitForm = async (data: ProfileSchema) => {
-        const response = await updateUser(data,'/cu/dashboard/profile');
+        const response = await updateUser(data, '/cu/dashboard/profile');
 
         if (response.success) {
             if (response.user) setUser(response.user);
@@ -36,7 +36,7 @@ const ProfileInfo = ({ user }: profileInfoProps) => {
         }
         setChange(false);
     }
-    
+
     return (
         <div className="flex flex-col gap-3 p-5 bg-content1-900 rounded-2xl w-full md:w-2/3 mx-auto h-full">
             <Toaster />
@@ -73,7 +73,10 @@ const ProfileInfo = ({ user }: profileInfoProps) => {
                     label='Date of Birth'
                     name={'dob'}
                     error={errors.dob?.message}
-                    setValue={(f: any, v: any) => setValue(f, v)}
+                    setValue={(f, v) => {
+                        console.log(f, v)
+                        setValue('dob', v)
+                    }}
                     value={formatForInputDate(prUser?.dob)}
                     onChange={() => setChange(true)}
                 />

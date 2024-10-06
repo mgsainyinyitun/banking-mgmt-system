@@ -4,39 +4,23 @@ import { Bank } from '@/app/types/types';
 import React, { useEffect } from 'react'
 import {
     ComposedChart,
-    Line,
     Area,
-    Bar,
     XAxis,
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend,
-    Scatter,
     ResponsiveContainer,
-    AreaChart,
 } from 'recharts';
-
-const data = [
-    { month: 1, amount: 1200 },
-    { month: 2, amount: 1400 },
-    { month: 3, amount: 800 },
-    { month: 4, amount: 2000 },
-    { month: 5, amount: 1500 },
-    { month: 6, amount: 1300 },
-    { month: 7, amount: 1800 },
-    { month: 8, amount: 1600 },
-    { month: 9, amount: 1900 },
-    { month: 10, amount: 1700 },
-    { month: 11, amount: 2100 },
-    { month: 12, amount: 2300 },
-];
-
 
 interface moneyFlowPrpos {
     bank: Bank | undefined
 }
 
+interface AccountSummary {
+    month: number;
+    year: number;
+    balance: number;
+}
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
@@ -50,7 +34,7 @@ const allMonths = Array.from({ length: 12 }, (_, i) => ({
 
 const MoneyFlow = ({ bank }: moneyFlowPrpos) => {
 
-    const [data, setData] = React.useState<any>([]);
+    const [data, setData] = React.useState<AccountSummary[]>([]);
 
     const fetchData = async () => {
         if (!bank?.id) return;

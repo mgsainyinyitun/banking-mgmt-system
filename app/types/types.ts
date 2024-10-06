@@ -1,4 +1,4 @@
-import { ACCOUNT_TYPE, AccountStatus, BankAccountType, TransactionStatus, TransactionType } from "@prisma/client";
+import { ACCOUNT_TYPE, AccountStatus, BankAccountType, TransactionStatus, TransactionType, TransferType } from "@prisma/client";
 
 export type User = {
     id?: string,
@@ -44,14 +44,31 @@ export type Transaction = {
     description?: string,
     bankAccountId?: number,
     transactionStatus?: string,
+    transferAccountId?: number,
+    transferAccountProfile?: string,
+    transferType?: TransferType
     createdAt?: Date,
     updatedAt?: Date,
 }
 
+export type TransactionTable = {
+    id?: number,
+    account?: string,
+    transaction_id: string,
+    amount: number,
+    transactionType: string,
+    transferAccountId?: number,
+    transferAccountProfile?: string,
+    transferType?: string
+    date?: string,
+    transactionStatus?: string,
+    description?: string
+}
+
 export type TransactionFilter = {
-    transaction_id?: any,
-    transactionType?: any,
-    date?: any,
+    transaction_id?: { contains: string },
+    transactionType?: TransactionType | { in: TransactionType[] },
+    date?: { lte: Date | undefined, gte: Date | undefined },
     bankAccountId?: number,
-    transactionStatus?: any,
+    transactionStatus?: TransactionStatus | { in: TransactionStatus[] },
 }

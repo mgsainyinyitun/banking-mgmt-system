@@ -80,9 +80,24 @@ export const withdrawSchema = z.object({
     available: z.preprocess((a) => parseInt(z.string().parse(a), 10),
         z.number().gte(0, 'Must be 0 and above')),
 }).refine((data) => data.amount <= data.available, {
-    message: 'Amount cannot be greater than available balance',
+    message: 'Insufficient balance',
     path: ['amount'],
 });
+
+export const transferSchema = z.object({
+    id: z.preprocess((a) => parseInt(z.string().parse(a), 10),
+        z.number().gte(1, 'Must be 1 and above')),
+    account_id: z.string().min(1, { message: "Id is required" }),
+    to_account_id: z.string().min(1, { message: "Id is required" }),
+    amount: z.preprocess((a) => parseInt(z.string().parse(a), 10),
+        z.number().gte(1, 'Must be 1 and above')),
+    available: z.preprocess((a) => parseInt(z.string().parse(a), 10),
+        z.number().gte(0, 'Must be 0 and above')),
+}).refine((data) => data.amount <= data.available, {
+    message: 'Insufficient balance',
+    path: ['amount'],
+});
+
 
 export type SignUpSchema = z.infer<typeof signupSchema>;
 
@@ -95,3 +110,5 @@ export type ProfileSchema = z.infer<typeof profileShema>
 export type DepositSchema = z.infer<typeof depositSchema>
 
 export type WithdrawSchema = z.infer<typeof withdrawSchema>
+
+export type TransferSchema = z.infer<typeof transferSchema>

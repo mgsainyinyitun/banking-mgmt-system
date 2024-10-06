@@ -6,7 +6,6 @@ import { Bank, Transaction } from '@/app/types/types';
 import FormStepper from '@/app/ui/components/common/FormStepper';
 import ResponsiveFormWraper from '@/app/ui/components/common/ResponsiveFormWraper'
 import FormInput from '@/app/ui/components/form/FormInput';
-import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons';
 import { faArrowLeft, faBank, faHome, faMoneyBill, faStarHalfStroke } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { zodResolver } from '@hookform/resolvers/zod';

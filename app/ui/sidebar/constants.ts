@@ -23,7 +23,7 @@ export const customerSideBar = [
     },
     {
         name: 'Settings',
-        link: '/',
+        link: '/settings',
         icon: faGear,
     },
     {

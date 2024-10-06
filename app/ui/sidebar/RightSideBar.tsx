@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendDown, faArrowTrendUp, faRightLeft } from '@fortawesome/free-solid-svg-icons';
 import { Avatar } from '@nextui-org/react';
@@ -40,15 +40,15 @@ export default async function RightSideBar({ user }: RightSideBarProps) {
 
                             <div className='mt-10'>
                                 <div className='flex gap-5 justify-between'>
-                                    <div className='bg-content1-900 rounded-2xl flex p-5 flex-1 justify-center items-center gap-3'>
+                                    <div className='bg-content1-900 rounded-2xl flex p-5 flex-1 justify-center items-center gap-3 flex-col'>
                                         <FontAwesomeIcon className='text-primary-400 text-3xl' icon={faArrowTrendDown} />
                                         <h3>Cash In</h3>
                                     </div>
-                                    <div className='bg-content1-900 rounded-2xl flex p-5 flex-1 justify-center items-center gap-3'>
+                                    <div className='bg-content1-900 rounded-2xl flex p-5 flex-1 justify-center items-center gap-3 flex-col'>
                                         <FontAwesomeIcon className='text-primary-400 text-3xl' icon={faRightLeft} />
                                         <h3>Transfer</h3>
                                     </div>
-                                    <div className='bg-content1-900 rounded-2xl flex p-5 flex-1 justify-center items-center gap-3'>
+                                    <div className='bg-content1-900 rounded-2xl flex p-5 flex-1 justify-center items-center gap-3 flex-col'>
                                         <FontAwesomeIcon className='text-primary-400 text-3xl' icon={faArrowTrendUp} />
                                         <h3>Cash Out</h3>
                                     </div>
