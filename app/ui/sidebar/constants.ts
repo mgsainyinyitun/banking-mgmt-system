@@ -1,4 +1,4 @@
-import { faFileInvoice, faGear, faHeadset, faHouse, faMoneyCheck, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faFileInvoice, faGear, faHeadset, faHouse, faMoneyCheck, faTicket, faUser } from "@fortawesome/free-solid-svg-icons";
 
 export const customerSideBar = [
     {
@@ -22,13 +22,18 @@ export const customerSideBar = [
         icon: faFileInvoice,
     },
     {
-        name: 'Settings',
-        link: '/settings',
-        icon: faGear,
+        name: 'Support',
+        link: '/support',
+        icon: faTicket
     },
     {
         name: 'Help',
-        link: '/',
+        link: '/help',
         icon: faHeadset
+    },
+    {
+        name: 'Settings',
+        link: '/settings',
+        icon: faGear,
     },
 ]

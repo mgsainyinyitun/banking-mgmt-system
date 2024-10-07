@@ -1,4 +1,5 @@
-import { ACCOUNT_TYPE, AccountStatus, BankAccountType, TransactionStatus, TransactionType, TransferType } from "@prisma/client";
+import { faCreditCard, faGlobe, faInfoCircle, faLock, faPiggyBank, faUserPlus, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { ACCOUNT_TYPE, AccountStatus, BankAccountType, TicketCategory, TicketPriority, TransactionStatus, TransactionType, TransferType } from "@prisma/client";
 
 export type User = {
     id?: string,
@@ -71,4 +72,35 @@ export type TransactionFilter = {
     date?: { lte: Date | undefined, gte: Date | undefined },
     bankAccountId?: number,
     transactionStatus?: TransactionStatus | { in: TransactionStatus[] },
+}
+
+export type Ticket = {
+    id: string,
+    title: string,
+    description: string,
+    priority: TicketPriority,
+    category: TicketCategory,
+    userId: string,
+    status?: string,
+    responses?: string,
+    closeAt?: Date,
+}
+
+export const TicketCategoryDescriptions: Record<TicketCategory, string> = {
+    [TicketCategory.ACCOUNT_OPEN]: 'Account Open',
+    [TicketCategory.ACCOUNT_TYPES]: 'Account Types',
+    [TicketCategory.ONLINE_BANKING]: 'Online Banking',
+    [TicketCategory.CARD_SERVICES]: 'Card Services',
+    [TicketCategory.FEES_AND_CHARGES]: 'Fees and Charges',
+    [TicketCategory.GENERAL]: 'General',
+};
+
+
+export const TicketCatIcons: Record<TicketCategory, IconDefinition> = {
+    [TicketCategory.ACCOUNT_OPEN]: faUserPlus,
+    [TicketCategory.ACCOUNT_TYPES]: faPiggyBank,
+    [TicketCategory.ONLINE_BANKING]: faLock,
+    [TicketCategory.CARD_SERVICES]: faCreditCard,
+    [TicketCategory.FEES_AND_CHARGES]: faGlobe,
+    [TicketCategory.GENERAL]: faInfoCircle,
 }

@@ -29,6 +29,7 @@ model User {
   bankAccounts BankAccount[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  Ticket       Ticket[]
 }
 
 model BankAccount {
@@ -80,6 +81,23 @@ model MonthlyBalanceRecord {
   @@unique([month, year, bankAccountId])
 }
 
+model Ticket {
+  id          String         @id @default(cuid())
+  title       String
+  description String         @db.Text
+  status      TicketStatus   @default(PENDING)
+  priority    TicketPriority @default(NORMAL)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  userId      String
+  user        User           @relation(fields: [userId], references: [id])
+  closedAt    DateTime?
+  responses   String?        @db.Text
+  category    TicketCategory @default(GENERAL)
+
+  @@index([userId])
+}
+
 enum AccountStatus {
   ACTIVE
   CLOSED
@@ -114,4 +132,27 @@ enum TransferType {
   CASHIN
   CASHOUT
   NONE
+}
+
+enum TicketStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum TicketCategory {
+  ACCOUNT_OPEN
+  ACCOUNT_TYPES
+  ONLINE_BANKING
+  CARD_SERVICES
+  FEES_AND_CHARGES
+  GENERAL
 }

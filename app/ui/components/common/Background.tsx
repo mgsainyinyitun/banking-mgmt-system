@@ -19,7 +19,7 @@ const Background = ({ children }: backgroundProps) => {
     return (
         <div className={`h-screen w-full 
             ${usertheme === 'light' ? 'bg-gradient-radial-circle from-pink-400 to-cyan-300' :
-                'bg-gradient-radial-circle from-pink-700 to-black'}`
+                'bg-gradient-radial-circle from-pink-700 to-blue-900'}`
         }>
             {children}
         </div>

@@ -39,7 +39,7 @@ export const signupSchema = z.object({
 
 
 export const passwordChangeSchema = z.object({
-    id:z.string().min(1, { message: "Id is required" }),
+    id: z.string().min(1, { message: "Id is required" }),
     oldpassword: z.string().min(6, "Password must be at least 6 characters long"),
     password: z.string().min(6, "Password must be at least 6 characters long"),
     confirmPassword: z.string().min(6, "Password must be at least 6 characters long"),
@@ -109,6 +109,15 @@ export const transferSchema = z.object({
 });
 
 
+export const newSupportTicketSchema = z.object({
+    title: z.string().min(1, { message: "Title is required" }),
+    description: z.string().min(10, { message: "Description is should have at least 10 characters" }),
+    priority: z.string().min(1, { message: "Priority is required" }),
+    category: z.string().min(1, { message: "Category is required" }),
+    userId: z.string().min(1, { message: "Id is required" }),
+})
+
+
 export type SignUpSchema = z.infer<typeof signupSchema>;
 
 export type SignInSchema = z.infer<typeof signInSchema>;
@@ -124,3 +133,5 @@ export type WithdrawSchema = z.infer<typeof withdrawSchema>
 export type TransferSchema = z.infer<typeof transferSchema>
 
 export type PasswordChangeSchema = z.infer<typeof passwordChangeSchema>
+
+export type NewSupportTicketSchema = z.infer<typeof newSupportTicketSchema>
