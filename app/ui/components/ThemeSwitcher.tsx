@@ -1,24 +1,32 @@
-// app/components/ThemeSwitcher.tsx
 "use client";
 
+import { Switch } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 export function ThemeSwitcher() {
-  const [mounted, setMounted] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const { theme, setTheme } = useTheme()
 
   useEffect(() => {
-    setMounted(true)
+    console.log('theme is:', theme);
+    if (theme === 'light') {
+      setIsDarkMode(false);
+    } else {
+      setIsDarkMode(true);
+    }
   }, [])
 
-  if (!mounted) return null
+  const onThemeChange = (e: boolean) => {
+    setIsDarkMode(e);
+    e ? setTheme('dark') : setTheme('light');
+  }
 
   return (
-    <div>
-      The current theme is: {theme}
-      <button onClick={() => setTheme('light')}>Light Mode</button>
-      <button onClick={() => setTheme('dark')}>Dark Mode</button>
-    </div>
+    <Switch
+      color="secondary"
+      aria-label="Automatic updates"
+      isSelected={isDarkMode} onValueChange={e => onThemeChange(e)}
+    />
   )
 };

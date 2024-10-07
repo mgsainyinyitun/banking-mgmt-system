@@ -45,6 +45,11 @@ const config: Config = {
           },
         }, // light theme colors
         dark: {
+          colors: {
+            content1: {
+              "900": 'rgba(0,0,0,0.7)',
+            }
+          }
         },
       },
     }),

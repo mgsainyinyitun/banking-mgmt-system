@@ -1,12 +1,13 @@
 'use server'
 import { User } from "@/app/types/types";
 import prisma from "../prisma";
-import { ProfileSchema } from "@/app/types/form-shema";
+import { PasswordChangeSchema, ProfileSchema } from "@/app/types/form-shema";
 import { revalidatePath } from "next/cache";
 import path, { join } from 'path';
 import { mkdir, stat, writeFile } from "fs/promises";
 import { getFileExtension } from "../utils";
 import fs from 'fs';
+import bcrypt from 'bcryptjs';
 
 
 export async function uploadProfile(data: FormData, id: string | undefined, route: string, imageUrl: string | undefined) {
@@ -76,6 +77,40 @@ export async function getUser(id: string | undefined): Promise<User | undefined>
         console.log(error);
     }
 }
+
+
+export async function changePassword(formData: PasswordChangeSchema) {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: formData.id },
+            select: { password: true }
+        });
+        if (!user) {
+            return { success: false, message: 'User not found!' };
+        }
+
+        
+        const passwordsMatch = await bcrypt.compare(formData.oldpassword, user.password);
+        if (!passwordsMatch) {
+            return { success: false, message: 'Old password is incorrect' };
+        }
+        // update password
+        const hashedPassword = await bcrypt.hash(formData.password, 10);
+        await prisma.user.update({
+            where: { id: formData.id },
+            data: {
+                password: hashedPassword
+            }
+        })
+        return { success: true, message: 'Successfully changed password!' };
+
+    } catch (error) {
+        console.log(error);
+        return { success: false, message: 'Something went wrong! Please try again.' };
+    }
+
+}
+
 
 export async function getUserProfileLink(id: string): Promise<string | undefined> {
     try {

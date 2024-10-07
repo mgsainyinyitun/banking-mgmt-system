@@ -1,12 +1,13 @@
 'use client'
+import { ThemeSwitcher } from '@/app/ui/components/ThemeSwitcher'
 import { faChevronRight, faCircleHalfStroke, faKey, faLanguage } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Listbox, ListboxItem, Switch } from '@nextui-org/react'
+import { Listbox, ListboxItem } from '@nextui-org/react'
 import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
 
 const Settings = () => {
+
     return (
         <div className='flex w-full h-full justify-center items-center p-3'>
             <div className='h-full bg-content1-900 rounded-2xl flex flex-col items-center md:w-[80%] lg:w-[70%] p-3'>
@@ -18,7 +19,7 @@ const Settings = () => {
                             key="new"
                             className='p-3 mb-3 bg-primary-400'
                             startContent={<FontAwesomeIcon icon={faCircleHalfStroke} className='text-white text-2xl' />}
-                            endContent={<Switch defaultSelected={false} aria-label="Automatic updates" />}
+                            endContent={<ThemeSwitcher />}
                         >
                             <p className='text-white text-xl'>Dark Mode</p>
                         </ListboxItem>
@@ -28,16 +29,19 @@ const Settings = () => {
                             key="copy"
                             startContent={<FontAwesomeIcon icon={faKey} className='text-white text-2xl' />}
                             endContent={<FontAwesomeIcon icon={faChevronRight} className='text-white text-2xl' />}
+                            href='settings/change-password'
                         >
-                            <Link href='settings/change-password' className='text-white text-xl'>
+                            <p className='text-white text-xl'>
                                 Change Password
-                            </Link>
+                            </p>
 
                         </ListboxItem>
+
                         <ListboxItem
                             variant='bordered'
                             className='p-3 bg-primary-400'
                             key="edit"
+                            href='settings/languages'
                             startContent={<FontAwesomeIcon icon={faLanguage} className='text-white text-2xl' />}
                             endContent={<FontAwesomeIcon icon={faChevronRight} className='text-white text-2xl' />}
                         >

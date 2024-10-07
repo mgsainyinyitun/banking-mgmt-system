@@ -1,8 +1,14 @@
 import React from 'react'
+import PasswordChangeForm from './PasswordChangeForm';
+import { auth } from '@/auth';
 
-const ChangePassword = () => {
+const ChangePassword = async () => {
+
+    const session = await auth();
     return (
-        <div>ChangePassword</div>
+        <div className='w-full h-full'>
+            <PasswordChangeForm id={session?.user?.id} />
+        </div>
     )
 }
 

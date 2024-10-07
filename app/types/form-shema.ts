@@ -12,7 +12,6 @@ export const bankAccountSchema = z.object({
     accountType: z.string().min(0, 'Require')
 })
 
-
 export const signupSchema = z.object({
     username: z.string().min(3, "Username must be at least 3 characters long"),
     nrc: z.string().min(6, "NRC must be at least y characters long"),
@@ -37,6 +36,17 @@ export const signupSchema = z.object({
         message: "Passwords don't match",
         path: ["confirmPassword"],
     });
+
+
+export const passwordChangeSchema = z.object({
+    id:z.string().min(1, { message: "Id is required" }),
+    oldpassword: z.string().min(6, "Password must be at least 6 characters long"),
+    password: z.string().min(6, "Password must be at least 6 characters long"),
+    confirmPassword: z.string().min(6, "Password must be at least 6 characters long"),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+});
 
 
 export const profileShema = z.object({
@@ -112,3 +122,5 @@ export type DepositSchema = z.infer<typeof depositSchema>
 export type WithdrawSchema = z.infer<typeof withdrawSchema>
 
 export type TransferSchema = z.infer<typeof transferSchema>
+
+export type PasswordChangeSchema = z.infer<typeof passwordChangeSchema>

@@ -4,13 +4,15 @@ import Image from 'next/image'
 import React from 'react'
 
 interface CreditCartProps {
-    bank: Bank | undefined
+    bank: Bank | undefined,
+    usertheme: string,
 }
-const CreditCart = ({ bank }: CreditCartProps) => {
+const CreditCart = ({ bank, usertheme }: CreditCartProps) => {
     return (
         <div className="max-w-sm mx-auto hover:shadow-2xl">
-            <div className="relative bg-gradient-to-r from-pink-400 to-indigo-300 rounded-xl text-white shadow-lg p-6">
-
+            <div className={`relative bg-gradient-to-r
+            ${usertheme === 'light' ? 'from-pink-400 to-indigo-300' : 'from-pink-700 to-blue-800'}  
+                 rounded-xl text-white shadow-lg p-6`}>
                 <div className="absolute top-4 right-4">
                     <Image
                         src="/icons/zai-logo.png"
