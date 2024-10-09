@@ -11,7 +11,7 @@ const Transaction = async () => {
 
     return (
         <div className='w-full h-full p-3'>
-            <div className='bg-content1-900 rounded-2xl w-full h-full'>
+            <div className='bg-content1-900 rounded-2xl w-full h-full overflow-auto'>
                 <TransactionTable transactions={res?.transactions} total={res?.total} id={banks[0].id} />
             </div>
         </div>

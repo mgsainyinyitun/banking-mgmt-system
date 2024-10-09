@@ -3,7 +3,7 @@ import { TRANSACTION_COLUMNS } from '@/app/constants/CONSTANTS'
 import { Transaction, TransactionFilter } from '@/app/types/types'
 import { Button, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { convertToDisplayData } from './common'
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { getAllTransactions } from '@/app/lib/actions/transaction-actions'
 import TopContent from './TopContents'
 import { renderCell } from './RenderCell'
@@ -74,6 +74,8 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
       bottomContentPlacement="outside"
       topContent={top}
       topContentPlacement="outside"
+      fullWidth
+      layout='auto'
     >
       <TableHeader columns={TRANSACTION_COLUMNS}>
         {

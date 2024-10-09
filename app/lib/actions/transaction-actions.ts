@@ -1,7 +1,7 @@
 'use server'
 import { DepositSchema, TransferSchema, WithdrawSchema } from "@/app/types/form-shema";
 import prisma from "../prisma";
-import { TransactionStatus, TransactionType, TransferType } from "@prisma/client";
+import { InvoiceStatus, InvoiceType, TransactionStatus, TransactionType, TransferType } from "@prisma/client";
 import { Transaction, TransactionFilter } from "@/app/types/types";
 import { decreaseBalance, getToAccountInfo, increaseActualBallance, increaseBalance } from "./bank-actions";
 
@@ -146,8 +146,36 @@ export async function transfer(formData: TransferSchema) {
             }),
         ]);
 
+        // Create invoices for both the sender and receiver
+        const [senderInvoice, receiverInvoice] = await prisma.$transaction([
+            prisma.invoice.create({
+                data: {
+                    bankId: tran_own_success.bankAccountId,
+                    amount: formData.amount,
+                    status: InvoiceStatus.PAID,
+                    type: InvoiceType.TRANSFER,
+                    transactionId: tran_own_success.id,
+                },
+            }),
+            prisma.invoice.create({
+                data: {
+                    bankId: tran_rec_success.bankAccountId,
+                    amount: formData.amount,
+                    status: InvoiceStatus.PAID,
+                    type: InvoiceType.RECEIVE,
+                    transactionId: tran_rec_success.id,
+                },
+            }),
+        ]);
+
         const rtrn = tran_own_success as Transaction;
-        return { success: true, transaction: rtrn, rec_id: tran_rec_success.bankAccountId };
+        return {
+            success: true,
+            transaction: rtrn,
+            rec_id: tran_rec_success.bankAccountId,
+            senderInvoice: senderInvoice,
+            receiverInvoice: receiverInvoice
+        };
 
     } catch (error) {
         console.log(error);

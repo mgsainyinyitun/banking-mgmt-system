@@ -55,7 +55,7 @@ const MoneyFlow = ({ bank }: moneyFlowPrpos) => {
         fetchData();
     }, [bank?.id]);
     return (
-        <div className='bg-content1-900 rounded-2xl w-full h-[250px] flex-1'>
+        <div className='bg-content1-900 rounded-2xl w-full min-h-[250px] h-[250px] flex-1'>
             <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={data}>
                     <defs>

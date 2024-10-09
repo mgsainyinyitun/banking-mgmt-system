@@ -69,8 +69,8 @@ const TopContent = ({ filter, setFilter }: topContentProps) => {
     }
 
     return (
-        <div className="flex flex-col gap-4">
-            <div className="flex justify-between gap-3 items-end">
+        <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row w-full justify-between gap-3 items-end">
                 <Input
                     isClearable
                     className="w-full sm:max-w-[44%]"
@@ -78,38 +78,42 @@ const TopContent = ({ filter, setFilter }: topContentProps) => {
                     startContent={<FontAwesomeIcon icon={faSearch} />}
                     value={searchValue}
                     onClear={clear}
+                    fullWidth
                     onValueChange={searchValueChange}
                 />
-                <div className="flex gap-3">
-                    <DatePicker
-                        label='From'
-                        className="max-w-[284px]"
-                        labelPlacement="outside-left"
-                        value={startDate}
-                        onChange={(v: DateValue) => {
-                            onFilterDateChange(v, 'FROM')
-                        }}
-                    />
-                    <DatePicker
-                        label='To'
-                        className="max-w-[284px]"
-                        labelPlacement="outside-left"
-                        value={endDate}
-                        onChange={(v) => onFilterDateChange(v, 'TO')}
-                    />
-
-                    <MutlipleDropdown
-                        filter={statusFilter}
-                        onFilterChange={onFilterChange}
-                        items={status_arr as []}
-                        name="STATUS"
-                    />
-                    <MutlipleDropdown
-                        filter={typeFilter}
-                        onFilterChange={onFilterChange}
-                        items={type_arr as []}
-                        name="TYPE"
-                    />
+                <div className="flex flex-col md:flex-row gap-3">
+                    <div className="flex gap-3">
+                        <DatePicker
+                            label='From'
+                            className="max-w-[284px]"
+                            labelPlacement="outside-left"
+                            value={startDate}
+                            onChange={(v: DateValue) => {
+                                onFilterDateChange(v, 'FROM')
+                            }}
+                        />
+                        <DatePicker
+                            label='To'
+                            className="max-w-[284px]"
+                            labelPlacement="outside-left"
+                            value={endDate}
+                            onChange={(v) => onFilterDateChange(v, 'TO')}
+                        />
+                    </div>
+                    <div className="flex gap-3">
+                        <MutlipleDropdown
+                            filter={statusFilter}
+                            onFilterChange={onFilterChange}
+                            items={status_arr as []}
+                            name="STATUS"
+                        />
+                        <MutlipleDropdown
+                            filter={typeFilter}
+                            onFilterChange={onFilterChange}
+                            items={type_arr as []}
+                            name="TYPE"
+                        />
+                    </div>
 
                 </div>
             </div>

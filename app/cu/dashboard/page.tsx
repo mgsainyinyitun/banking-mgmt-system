@@ -16,14 +16,16 @@ const Dashboard = async () => {
 
   return (
     <>
-      <div className='h-full overflow-auto flex flex-col'>
-        <div className='p-5 flex flex-col md:flex-row gap-5'>
-          <TotalBalance bank={banks[0]} />
-          <MoneyFlow bank={banks[0]} />
-        </div>
+      <div className='h-full overflow-hidden flex flex-col'>
+        <div className='overflow-auto'>
+          <div className='p-5 flex flex-col md:flex-row gap-5'>
+            <TotalBalance bank={banks[0]} />
+            <MoneyFlow bank={banks[0]} />
+          </div>
 
-        <div className='flex-1 overflow-auto pb-5 px-5'>
-          <RecentTransactions transactions={res?.transactions} />
+          <div className='overflow-auto pb-5 px-5 min-h-[300px]'>
+            <RecentTransactions transactions={res?.transactions} />
+          </div>
         </div>
       </div>
     </>

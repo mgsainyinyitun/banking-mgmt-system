@@ -1,5 +1,5 @@
 import { faCreditCard, faGlobe, faInfoCircle, faLock, faPiggyBank, faUserPlus, IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { ACCOUNT_TYPE, AccountStatus, BankAccountType, TicketCategory, TicketPriority, TransactionStatus, TransactionType, TransferType } from "@prisma/client";
+import { ACCOUNT_TYPE, AccountStatus, BankAccountType, TicketCategory, TicketPriority, TransactionStatus, TransactionType, TransferType, InvoiceStatus, InvoiceType } from "@prisma/client";
 
 export type User = {
     id?: string,
@@ -74,6 +74,11 @@ export type TransactionFilter = {
     transactionStatus?: TransactionStatus | { in: TransactionStatus[] },
 }
 
+export type InvoiceFilter = {
+    username?: string | undefined ,
+    date?: { lte: Date | undefined, gte: Date | undefined },
+}
+
 export type Ticket = {
     id: string,
     title: string,
@@ -103,4 +108,19 @@ export const TicketCatIcons: Record<TicketCategory, IconDefinition> = {
     [TicketCategory.CARD_SERVICES]: faCreditCard,
     [TicketCategory.FEES_AND_CHARGES]: faGlobe,
     [TicketCategory.GENERAL]: faInfoCircle,
+}
+
+export type Invoice = {
+    id: number | string;
+    bankId: number;
+    bankUsername?: string | null;
+    bankProfile?: string | null;
+    amount: number;
+    status: InvoiceStatus;
+    type: InvoiceType;
+    createdAt?: string;
+    updatedAt?: Date;
+    transactionId?: string | undefined;
+    transferAccount?: string | null;
+    transferAccountProfile?: string | null;
 }

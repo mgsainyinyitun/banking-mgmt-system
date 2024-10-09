@@ -18,7 +18,7 @@ export const customerSideBar = [
     },
     {
         name: 'Invoice',
-        link: '/',
+        link: '/invoices',
         icon: faFileInvoice,
     },
     {

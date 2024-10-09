@@ -49,6 +49,7 @@ model BankAccount {
   MonthlyBalanceRecord    MonthlyBalanceRecord[]
   transactions_owner      Transaction[]          @relation("transaction_owner_acc")
   transactions_transer_to Transaction[]          @relation("transaction_transer_relation_acc")
+  Invoice                 Invoice[]              @relation("invoice_relation")
 }
 
 model Transaction {
@@ -66,6 +67,7 @@ model Transaction {
   transferType      TransferType      @default(NONE)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
+  Invoice           Invoice[]
 }
 
 model MonthlyBalanceRecord {
@@ -96,6 +98,19 @@ model Ticket {
   category    TicketCategory @default(GENERAL)
 
   @@index([userId])
+}
+
+model Invoice {
+  id            Int        @id @default(autoincrement())
+  bankId        Int
+  bank          BankAccount   @relation("invoice_relation", fields: [bankId], references: [id])
+  amount        Float
+  status        InvoiceStatus @default(PENDING)
+  type          InvoiceType   @default(TRANSFER)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  transaction   Transaction?  @relation(fields: [transactionId], references: [id])
+  transactionId Int?
 }
 
 enum AccountStatus {
@@ -155,4 +170,15 @@ enum TicketCategory {
   CARD_SERVICES
   FEES_AND_CHARGES
   GENERAL
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+enum InvoiceType {
+  RECEIVE
+  TRANSFER
 }
