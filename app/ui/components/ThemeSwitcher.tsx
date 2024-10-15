@@ -19,7 +19,11 @@ export function ThemeSwitcher() {
 
   const onThemeChange = (e: boolean) => {
     setIsDarkMode(e);
-    e ? setTheme('dark') : setTheme('light');
+    if (e) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
   }
 
   return (

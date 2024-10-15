@@ -3,15 +3,15 @@ import { TRANSACTION_COLUMNS } from '@/app/constants/CONSTANTS'
 import { Transaction, TransactionFilter } from '@/app/types/types'
 import { Button, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { convertToDisplayData } from './common'
-import { Fragment, useEffect, useMemo, useState } from 'react'
-import { getAllTransactions } from '@/app/lib/actions/transaction-actions'
+import { useEffect, useMemo, useState } from 'react'
+import { getAllTransactions, getTransactionByAdmin } from '@/app/lib/actions/transaction-actions'
 import TopContent from './TopContents'
 import { renderCell } from './RenderCell'
 
 interface transactionTableProps {
   transactions: Transaction[] | undefined,
   total: number | undefined,
-  id: number | undefined
+  id: number | undefined,
 }
 
 const TransactionTable = ({ transactions, total, id }: transactionTableProps) => {
@@ -23,7 +23,10 @@ const TransactionTable = ({ transactions, total, id }: transactionTableProps) =>
   const [dbtransactions, setTransactions] = useState(transactions);
 
   const refetch = async () => {
-    const res = await getAllTransactions(id, filter, pageSize, page, pageSize);
+    const res = id === -1 ?
+      await getTransactionByAdmin(filter, pageSize, page, pageSize) :
+      await getAllTransactions(id, filter, pageSize, page, pageSize);
+      
     if (res?.success) {
       setTransactions(res.transactions);
       setTotalPages(res.total ? Math.ceil(res?.total / pageSize) : totalPages);

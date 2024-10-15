@@ -2,15 +2,13 @@ import prisma from '@/app/lib/prisma';
 import { Invoice } from '@/app/types/types';
 import { NextResponse } from 'next/server';
 
-
-
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
         const userId = searchParams.get('userId');
         let username = searchParams.get('username') as string | undefined;
-        let gte = searchParams.get('gte') as string | undefined;
-        let lte = searchParams.get('lte') as string | undefined;
+        const gte = searchParams.get('gte') as string | undefined;
+        const lte = searchParams.get('lte') as string | undefined;
 
         if (!userId) {
             return NextResponse.json({ error: 'User ID is required' }, { status: 400 });

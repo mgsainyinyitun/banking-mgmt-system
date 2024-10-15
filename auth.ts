@@ -55,7 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 }
                 token.user = usr;
             }
-            // console.log('token is :::', token)
+            console.log('token is :::', token)
             return token;
         },
         async session({ session, token }) {

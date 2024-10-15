@@ -73,7 +73,7 @@ const TopContent = ({ filter, setFilter }: topContentProps) => {
             <div className="flex flex-col md:flex-row w-full justify-between gap-3 items-end">
                 <Input
                     isClearable
-                    className="w-full sm:max-w-[44%]"
+                    className="w-full"
                     placeholder="Search by transaction id..."
                     startContent={<FontAwesomeIcon icon={faSearch} />}
                     value={searchValue}

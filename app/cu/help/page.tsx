@@ -1,7 +1,7 @@
 import Link from "next/link"
 import FaqComponent from "./FaqComponent"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPlug, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { Divider } from "@nextui-org/react"
 
 const Help = () => {
@@ -21,7 +21,9 @@ const Help = () => {
                 <Divider className="my-5" />
 
                 <h1 className='text-center text-3xl text-primary-400 font-semibold'>Frequently Ask Questions</h1>
+
                 <FaqComponent />
+
             </div>
         </div>
     )

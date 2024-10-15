@@ -2,9 +2,9 @@
 import { deleteTicket } from '@/app/lib/actions/ticket-actions'
 import { Ticket, TicketCategoryDescriptions, TicketCatIcons } from '@/app/types/types'
 import AcceptModal from '@/app/ui/components/common/AcceptModal'
-import { faA, faCircleCheck, faCircleQuestion, faGem, faL, faPlus, faQuestion, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faCircleQuestion, faPlus, faTicket, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Accordion, AccordionItem, Chip } from '@nextui-org/react'
+import { Accordion, AccordionItem, Card, Chip } from '@nextui-org/react'
 import { TicketPriority } from '@prisma/client'
 import Link from 'next/link'
 import React, { useState } from 'react'
@@ -15,13 +15,10 @@ interface TicketListProps {
 }
 
 const TicketList = ({ tickets }: TicketListProps) => {
-    if (!tickets) return;
-
-    const [delOpen, setDelOpen] = useState(false);
+    const [delOpen, setDelOpen] = useState<boolean>(false);
     const [toDeleteTicket, setToDeleteTicket] = useState<Ticket | undefined>();
-
+    if (!tickets) return;
     const ticketDelete = (ticket: Ticket) => {
-        console.log(ticket);
         setDelOpen(true);
         setToDeleteTicket(ticket);
     }
@@ -72,37 +69,45 @@ const TicketList = ({ tickets }: TicketListProps) => {
                         </Link>
                     </div>
                 </div>
-                <Accordion selectionMode="multiple">
-                    {
-                        tickets.map((ticket, index) => {
-                            return (
-                                <AccordionItem
-                                    key={index}
-                                    aria-label={ticket.title}
-                                    startContent={
-                                        <FontAwesomeIcon icon={TicketCatIcons[ticket.category]} size='lg' className='text-white bg-primary-400 p-3 rounded-full text-2xl' />
-                                    }
-                                    disableIndicatorAnimation
-                                    subtitle={renderSubTitle(ticket)}
-                                    title={renderTitle(ticket)}
-                                    indicator={<FontAwesomeIcon icon={faTrash} className='text-danger-500' onClick={() => ticketDelete(ticket)} />}
-                                >
-                                    <div className='rounded-lg min-h-12 text-primary-600 p-3'>
-                                        <p className='text-violet-500 flex justify-start items-center gap-3'>
-                                            <FontAwesomeIcon icon={faCircleQuestion} className='text-violet-500 text-3xl' />  {ticket.description}
-                                        </p>
-                                        <p className='flex justify-start items-center gap-3 mt-5 border-1 border-gray-500 p-3 min-h-5 rounded-lg'>
-                                            <FontAwesomeIcon icon={faCircleCheck} className='text-3xl text-violet-500' />
-                                            {ticket.responses ? ticket.responses : 'No Response'}
-                                        </p>
-                                    </div>
+                {tickets.length > 0 ? (
+                    <Accordion selectionMode="multiple">
+                        {
+                            tickets.map((ticket, index) => {
+                                return (
+                                    <AccordionItem
+                                        key={index}
+                                        aria-label={ticket.title}
+                                        startContent={
+                                            <FontAwesomeIcon icon={TicketCatIcons[ticket.category]} size='lg' className='text-white bg-primary-400 p-3 rounded-full text-2xl' />
+                                        }
+                                        disableIndicatorAnimation
+                                        subtitle={renderSubTitle(ticket)}
+                                        title={renderTitle(ticket)}
+                                        indicator={<FontAwesomeIcon icon={faTrash} className='text-danger-500' onClick={() => ticketDelete(ticket)} />}
+                                    >
+                                        <div className='rounded-lg min-h-12 text-primary-600 p-3'>
+                                            <p className='text-violet-500 flex justify-start items-center gap-3'>
+                                                <FontAwesomeIcon icon={faCircleQuestion} className='text-violet-500 text-3xl' />  {ticket.description}
+                                            </p>
+                                            <p className='flex justify-start items-center gap-3 mt-5 border-1 border-gray-500 p-3 min-h-5 rounded-lg'>
+                                                <FontAwesomeIcon icon={faCircleCheck} className='text-3xl text-violet-500' />
+                                                {ticket.responses ? ticket.responses : 'No Response'}
+                                            </p>
+                                        </div>
 
-                                </AccordionItem>
-                            )
-                        })
-                    }
+                                    </AccordionItem>
+                                )
+                            })
+                        }
 
-                </Accordion>
+                    </Accordion>
+                ) : (
+                    <Card className="p-6 text-center">
+                        <FontAwesomeIcon icon={faTicket} size="4x" className="text-primary-200 mb-4" />
+                        <h3 className="text-2xl font-semibold text-gray-700 mb-2">No Tickets Found</h3>
+                        <p className="text-gray-500">You haven&apos;t created any support tickets yet. Need help? Create a new ticket!</p>
+                    </Card>
+                )}
             </div>
             <AcceptModal
                 isOpen={delOpen}

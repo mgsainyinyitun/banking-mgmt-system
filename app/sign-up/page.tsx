@@ -9,22 +9,20 @@ import FormInput from '../ui/components/form/FormInput';
 import FormPassword from '../ui/components/form/FormPassword';
 import FormDate from '../ui/components/form/FormDate';
 import toast, { Toaster } from 'react-hot-toast';
-import { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const SignIn = () => {
-    const { theme } = useTheme();
-    const [usertheme, setUserTheme] = useState('light');
+    // const { theme } = useTheme();
+    // const [usertheme, setUserTheme] = useState('light');
     const router = useRouter();
 
-    useEffect(() => {
-        if (theme) {
-            setUserTheme(theme);
-        }
-    }, [theme])
+    // useEffect(() => {
+    //     if (theme) {
+    //         setUserTheme(theme);
+    //     }
+    // }, [theme])
 
     const { control, register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<SignUpSchema>({
         resolver: zodResolver(signupSchema),

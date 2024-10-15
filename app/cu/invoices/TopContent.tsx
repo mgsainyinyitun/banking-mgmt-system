@@ -1,5 +1,5 @@
 'use client'
-import { InvoiceFilter, TransactionFilter } from "@/app/types/types";
+import { InvoiceFilter } from "@/app/types/types";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DatePicker, DateValue, Input } from "@nextui-org/react";

@@ -51,6 +51,52 @@ export async function getAllTransactions(
 }
 
 
+export async function getTransactionByAdmin(
+    filter: TransactionFilter = {}, count?: number, page?: number, pageSize?: number
+) {
+    try {
+        let skip = undefined;
+        if (page && pageSize) {
+            skip = (page - 1) * pageSize;
+        }
+
+        const [transactions, total] = await prisma.$transaction([
+            prisma.transaction.findMany({
+                where: filter,
+                orderBy: {
+                    createdAt: 'desc'
+                },
+                include: {
+                    transferAccount: {
+                        include: {
+                            User: true,
+                        }
+                    }
+                },
+                skip,
+                take: count || undefined
+            }),
+            prisma.transaction.count({
+                where: filter
+            })
+        ]);
+
+        const trans = transactions as Transaction[];
+
+        transactions.forEach(tr => {
+            const t = tr as Transaction;
+            t.transferAccountProfile = tr.transferAccount?.User?.profileImage || undefined;
+        })
+
+        return { success: true, transactions: trans, total };
+    } catch (error) {
+        console.log(error);
+        return { success: false };
+    }
+}
+
+
+
 export async function deposit(formData: DepositSchema) {
     try {
         const transaction = await prisma.transaction.create({

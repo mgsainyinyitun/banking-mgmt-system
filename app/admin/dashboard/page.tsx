@@ -1,9 +1,25 @@
-import React from 'react'
+import UserCountCards from './UserCountCards';
+import UserGrowth from './UserGrowth';
+import MoneyFlow from './MoneyFlow';
+import { getUserCounts } from '@/app/lib/actions/admin-actions';
 
-const AdminDashboard = () => {
-  return (
-    <div>AdminDashboard</div>
-  )
-}
+const AdminDashboard = async () => {
+    const { adminCount, customerCount, tellerCount, total } = await getUserCounts();
 
-export default AdminDashboard
+    return (
+        <div className="flex flex-col items-center p-5 h-full">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 w-full h-full overflow-auto">
+                <UserCountCards 
+                    totalUsers={total} 
+                    totalAdmins={adminCount} 
+                    totalTellers={tellerCount} 
+                    totalCustomers={customerCount} 
+                />
+                <UserGrowth />
+                <MoneyFlow />
+            </div>
+        </div>
+    );
+};
+
+export default AdminDashboard;

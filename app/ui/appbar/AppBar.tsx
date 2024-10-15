@@ -10,20 +10,25 @@ interface appBarProps {
 
 const AppBar = ({ user }: appBarProps) => {
     return (
-        <div className='bg-content1-900 w-full min-h-14 p-3 flex justify-between items-center gap-5'>
-
-            <div className='flex flex-col gap-2 flex-1'>
-                <h1 className='text-3xl text-primary-400 font-semibold'>Hi , {user?.username} 👋</h1>
-                <p className='text-gray-400'>Welcome to banking management system</p>
+        <div className='bg-content1-900 w-full min-h-14 p-3 flex flex-col md:flex-row justify-between items-center gap-5'>
+            <div className='flex flex-col gap-2 w-full md:w-auto'>
+                <h1 className='text-2xl md:text-3xl text-primary-400 font-semibold'>Hi, {user?.username} 👋</h1>
+                <p className='hidden md:block text-sm md:text-base text-gray-400'>Welcome to banking management system</p>
             </div>
 
-            <div className='flex-1'>
-                <Input startContent={<FontAwesomeIcon icon={faSearch} />} size='lg' type="text" placeholder='search ...' />
+            <div className='hidden md:block w-1/3 mt-4 md:mt-0'>
+                <Input 
+                    startContent={<FontAwesomeIcon icon={faSearch} />} 
+                    size='lg' 
+                    type="text" 
+                    placeholder='search ...' 
+                    className='w-full'
+                />
             </div>
 
-            <div className='flex gap-5'>
-                <FontAwesomeIcon className='text-2xl text-primary-400' icon={faBell} />
-                <FontAwesomeIcon className='text-2xl text-primary-400' icon={faEnvelope} />
+            <div className='flex gap-5 mt-4 md:mt-0'>
+                <FontAwesomeIcon className='text-xl md:text-2xl text-primary-400' icon={faBell} />
+                <FontAwesomeIcon className='text-xl md:text-2xl text-primary-400' icon={faEnvelope} />
             </div>
         </div>
     )

@@ -1,7 +1,7 @@
 'use client'
 import { getMonthlyBalances } from '@/app/lib/actions/monthly-balance-action';
 import { Bank } from '@/app/types/types';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     ComposedChart,
     Area,
@@ -12,7 +12,7 @@ import {
     ResponsiveContainer,
 } from 'recharts';
 
-interface moneyFlowPrpos {
+interface moneyFlowProps {
     bank: Bank | undefined
 }
 
@@ -32,9 +32,10 @@ const allMonths = Array.from({ length: 12 }, (_, i) => ({
     balance: 0,
 }));
 
-const MoneyFlow = ({ bank }: moneyFlowPrpos) => {
-
-    const [data, setData] = React.useState<AccountSummary[]>([]);
+const MoneyFlow = ({ bank }: moneyFlowProps) => {
+    const [data, setData] = useState<AccountSummary[]>([]);
+    const [chartWidth, setChartWidth] = useState('100%');
+    const [chartHeight, setChartHeight] = useState(250);
 
     const fetchData = async () => {
         if (!bank?.id) return;
@@ -54,9 +55,29 @@ const MoneyFlow = ({ bank }: moneyFlowPrpos) => {
     useEffect(() => {
         fetchData();
     }, [bank?.id]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 640) {
+                setChartWidth('100%');
+                setChartHeight(200);
+            } else if (window.innerWidth < 1024) {
+                setChartWidth('100%');
+                setChartHeight(250);
+            } else {
+                setChartWidth('100%');
+                setChartHeight(300);
+            }
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
-        <div className='bg-content1-900 rounded-2xl w-full min-h-[250px] h-[250px] flex-1'>
-            <ResponsiveContainer width="100%" height="100%">
+        <div className='bg-content1-900 rounded-2xl w-full h-full flex-1 p-4'>
+            <ResponsiveContainer width={chartWidth} height={chartHeight}>
                 <ComposedChart data={data}>
                     <defs>
                         <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
@@ -65,11 +86,14 @@ const MoneyFlow = ({ bank }: moneyFlowPrpos) => {
                         </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" tickFormatter={(month) => new Date(0, month - 1).toLocaleString('default', { month: 'short' })} />
-                    <YAxis />
+                    <XAxis 
+                        dataKey="month" 
+                        tickFormatter={(month) => new Date(0, month - 1).toLocaleString('default', { month: 'short' })}
+                        tick={{ fontSize: '0.8rem' }}
+                    />
+                    <YAxis tick={{ fontSize: '0.8rem' }} />
                     <Tooltip formatter={(value) => [`$${value}`, 'Amount']} />
                     <Area type="monotone" dataKey="balance" stroke="#8884d8" fill="url(#colorAmount)" />
-                    {/* <Bar dataKey="amount" barSize={10} fill="#82ca9d" /> */}
                 </ComposedChart>
             </ResponsiveContainer>
         </div>
@@ -77,5 +101,3 @@ const MoneyFlow = ({ bank }: moneyFlowPrpos) => {
 }
 
 export default MoneyFlow
-
-

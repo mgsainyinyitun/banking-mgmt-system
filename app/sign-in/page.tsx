@@ -74,7 +74,7 @@ const SignIn = () => {
                             {isSubmitting ? 'Loading...' : 'Sign In'}
                         </Button>
 
-                        <p className='text-center text-gray-500'>Don't have an account? <Link href="/sign-up" className='text-blue-500'>Sign Up</Link></p>
+                        <p className='text-center text-gray-500'>Don&apos;t have an account? <Link href="/sign-up" className='text-blue-500'>Sign Up</Link></p>
                     </form>
                 </div>
             </div>
