@@ -124,3 +124,60 @@ export type Invoice = {
     transferAccount?: string | null;
     transferAccountProfile?: string | null;
 }
+
+export type MonthlyData = {
+    month: string;
+    users: number;
+    customers: number;
+    admins: number;
+    tellers: number;
+};
+
+export type UserList = {
+    id: string;
+    type: ACCOUNT_TYPE;
+    profileImage: string | null;
+    username: string;
+    email: string;
+    phone: string;
+    bankAccounts: {
+        accountNumber: string;
+        account_name: string;
+        accountType: string;
+        balance: number;
+        availableBalance: number;
+        accountStatus: string;
+        accountOpenedAt: Date;
+        accountClosedAt: Date | null;
+    }[];
+};
+
+export type UserDetail = {
+    id: string;
+    type: ACCOUNT_TYPE;
+    profileImage: string | null;
+    username: string;
+    email: string;
+    phone: string;
+    city: string;
+    state: string;
+    address: string;
+    nrc: string;
+    dob: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    bankAccounts: {
+        accountNumber: string;
+        account_name: string;
+        accountType: string;
+        balance: number;
+        availableBalance: number;
+        accountStatus: string;
+        accountOpenedAt: Date;
+        accountClosedAt: Date | null;
+    }[];
+    _count: {
+        Ticket: number;
+        bankAccounts: number;
+    };
+};
