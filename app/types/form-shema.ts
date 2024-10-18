@@ -38,26 +38,6 @@ export const signupSchema = z.object({
         path: ["confirmPassword"],
     });
 
-export const addAccountSchema = z.object({
-    username: z.string().min(3, "Username must be at least 3 characters long"),
-    nrc: z.string().min(6, "NRC must be at least y characters long"),
-    email: z.string().email(),
-    dob: z.preprocess(
-        (arg) => {
-            if (arg instanceof CalendarDate) {
-                return new Date(arg.year, arg.month - 1, arg.day);
-            }
-            return arg;
-        },
-        z.date({ required_error: "Date of birth is required" })
-    ),
-    phone: z.string().min(10, "Phone number is not valid!"),
-    city: z.string().min(1, { message: "City is required" }),
-    state: z.string().min(1, { message: "City is required" }),
-    address: z.string().min(1, { message: "City is required" }),
-    type: z.string().min(1, { message: "Account type is required" }),
-});
-
 export const passwordChangeSchema = z.object({
     id: z.string().min(1, { message: "Id is required" }),
     oldpassword: z.string().min(6, "Password must be at least 6 characters long"),
@@ -137,26 +117,28 @@ export const newSupportTicketSchema = z.object({
     userId: z.string().min(1, { message: "Id is required" }),
 })
 
+export const adminUserCreateSchema = z.object({
+    type: z.nativeEnum(ACCOUNT_TYPE),
+    username: z.string().min(1, { message: "Username is required" }),
+    email: z.string().email({ message: "Invalid email address" }),
+    phone: z.string().min(1, { message: "Phone number is required" }),
+    city: z.string().min(1, { message: "City is required" }),
+    state: z.string().min(1, { message: "State is required" }),
+    address: z.string().min(1, { message: "Address is required" }),
+    nrc: z.string().min(1, { message: "NRC is required" }),
+    dob: z.preprocess(
+        (arg) => {
+            if (arg instanceof CalendarDate) {
+                return new Date(arg.year, arg.month - 1, arg.day);
+            }
+            return arg;
+        },
+        z.date({ required_error: "Date of birth is required" })
+    ),
+    bankUserName: z.string().min(6, 'At Least 6 characters').optional(),
+    accountType: z.string().min(0, 'Require').optional(),
+});
 
-export type SignUpSchema = z.infer<typeof signupSchema>;
-
-export type SignInSchema = z.infer<typeof signInSchema>;
-
-export type BankAccountSchema = z.infer<typeof bankAccountSchema>
-
-export type ProfileSchema = z.infer<typeof profileShema>
-
-export type DepositSchema = z.infer<typeof depositSchema>
-
-export type WithdrawSchema = z.infer<typeof withdrawSchema>
-
-export type TransferSchema = z.infer<typeof transferSchema>
-
-export type PasswordChangeSchema = z.infer<typeof passwordChangeSchema>
-
-export type NewSupportTicketSchema = z.infer<typeof newSupportTicketSchema>
-
-export type AddAccountSchema = z.infer<typeof addAccountSchema>
 
 export const adminUserUpdateSchema = z.object({
     id: z.string().uuid(),
@@ -176,4 +158,25 @@ export const adminUserUpdateSchema = z.object({
     bankAccountNumber: z.string().optional(),
 });
 
+
+export type SignUpSchema = z.infer<typeof signupSchema>;
+
+export type SignInSchema = z.infer<typeof signInSchema>;
+
+export type BankAccountSchema = z.infer<typeof bankAccountSchema>
+
+export type ProfileSchema = z.infer<typeof profileShema>
+
+export type DepositSchema = z.infer<typeof depositSchema>
+
+export type WithdrawSchema = z.infer<typeof withdrawSchema>
+
+export type TransferSchema = z.infer<typeof transferSchema>
+
+export type PasswordChangeSchema = z.infer<typeof passwordChangeSchema>
+
+export type NewSupportTicketSchema = z.infer<typeof newSupportTicketSchema>
+
 export type AdminUserUpdateSchema = z.infer<typeof adminUserUpdateSchema>;
+
+export type AdminUserCreateSchema = z.infer<typeof adminUserCreateSchema>;

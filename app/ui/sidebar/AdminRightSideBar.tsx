@@ -61,7 +61,7 @@ export default function AdminRightSideBar({ user }: AdminRightSideBarProps) {
                             <div className='mt-10'>
                                 <div className='flex gap-5 justify-between'>
                                     <div className='bg-content1-900 rounded-2xl flex-1'>
-                                        <Link href='/admin/user/add' className='flex p-5 justify-center items-center gap-3 flex-col'>
+                                        <Link href='/admin/users/add' className='flex p-5 justify-center items-center gap-3 flex-col'>
                                             <FontAwesomeIcon className='text-primary-400 text-3xl' icon={faUserPlus} />
                                             <h3>Add User</h3>
                                         </Link>

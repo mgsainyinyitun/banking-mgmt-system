@@ -3,8 +3,9 @@ import { MonthlyData, User, UserDetail, UserList } from "@/app/types/types";
 import prisma from "../prisma";
 import { ACCOUNT_TYPE, Prisma } from "@prisma/client";
 import bcrypt from 'bcryptjs';
-import { AddAccountSchema, ProfileSchema, AdminUserUpdateSchema } from "@/app/types/form-shema";
+import { ProfileSchema, AdminUserUpdateSchema, AdminUserCreateSchema, BankAccountSchema } from "@/app/types/form-shema";
 import { revalidatePath } from 'next/cache';
+import { createBankAccount } from "./bank-actions";
 
 
 export const getUserCounts = async () => {
@@ -152,7 +153,7 @@ export const deleteUser = async (id: string) => {
     }
 };
 
-export const addUser = async (userData: AddAccountSchema) => {
+export const addUser = async (userData: AdminUserCreateSchema) => {
     try {
         const hashedPassword = await bcrypt.hash('12345', 10);
         const type = userData.type ? userData.type : undefined;
@@ -171,7 +172,20 @@ export const addUser = async (userData: AddAccountSchema) => {
             }
         });
         console.log('created user:', user);
+
+        if (user.type === ACCOUNT_TYPE.CUSTOMER) {
+            const formData = {
+                userId: user.id,
+                username: userData.bankUserName,
+                accountType: userData.accountType,
+
+            } as BankAccountSchema;
+            const bank = await createBankAccount(formData);
+        }
+        revalidatePath('/admin/users');
         return { success: true, user };
+
+
     } catch (error) {
         console.log(error);
         if (error instanceof Prisma.PrismaClientKnownRequestError) {

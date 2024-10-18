@@ -109,6 +109,7 @@ const UserTable: React.FC<UserTableProps> = ({ initialUsers, initialTotalUsers, 
                 placeholder="Search by username or bank account ID"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className='mr-3'
             />
             <Dropdown>
                 <DropdownTrigger>
@@ -134,7 +135,7 @@ const UserTable: React.FC<UserTableProps> = ({ initialUsers, initialTotalUsers, 
     );
 
     return (
-        <div className="container mx-auto px-4 py-8 h-full">
+        <div className="container mx-auto px-4 py-8 h-full w-full">
             <Table
                 className='h-full w-full bg-content1-900 p-3 rounded-2xl overflow-auto'
                 removeWrapper
