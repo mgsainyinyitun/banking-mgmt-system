@@ -145,7 +145,12 @@ export const deleteUser = async (id: string) => {
             return { success: false, message: 'User not found' };
         }
 
+        // Delete related records first to avoid foreign key constraint errors
+        await prisma.bankAccount.deleteMany({ where: { userId: id } });
+        await prisma.ticket.deleteMany({ where: { userId: id } });
+
         await prisma.user.delete({ where: { id } });
+        revalidatePath('/admin/users');
         return { success: true, message: 'User deleted successfully' };
     } catch (error) {
         console.error(error);

@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { getAllUsers, deleteUser } from '@/app/lib/actions/admin-actions';
 import { User, UserList } from '@/app/types/types';
 import { ACCOUNT_TYPE } from '@prisma/client';
+import AcceptModal from '@/app/ui/components/common/AcceptModal';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface UserTableProps {
     initialUsers: UserList[];
@@ -16,6 +18,8 @@ interface UserTableProps {
 const UserTable: React.FC<UserTableProps> = ({ initialUsers, initialTotalUsers, initialTotalPages }) => {
     const pageSize = 10;
     const [page, setPage] = useState<number>(1);
+    const [delOpen, setDelOpen] = useState<boolean>(false);
+    const [toDeleteUser, setToDeleteUser] = useState<string | undefined>();
     const [totalUsers, setTotalUsers] = useState<number>(initialTotalUsers);
     const [totalPages, setTotalPages] = useState<number>(initialTotalPages);
     const [users, setUsers] = useState<UserList[]>(initialUsers);
@@ -49,14 +53,29 @@ const UserTable: React.FC<UserTableProps> = ({ initialUsers, initialTotalUsers, 
 
     const handleDeleteUser = async (id: string | undefined) => {
         if (id) {
-            const res = await deleteUser(id);
-            if (res?.success) {
-                fetchUsers(page); // Refresh the user list after deletion
-            } else {
-                // Handle error appropriately
-            }
+            setToDeleteUser(id);
+            setDelOpen(true);
+            // const res = await deleteUser(id);
+            // if (res?.success) {
+            //     fetchUsers(page); // Refresh the user list after deletion
+            // } else {
+            //     // Handle error appropriately
+            // }
         }
     };
+
+    const onDeleteAccept = async () => {
+        console.log('user is :', toDeleteUser);
+        if (toDeleteUser) {
+            const res = await deleteUser(toDeleteUser);
+            if (res?.success) {
+                toast.success('Successfully Delete user!');
+            } else {
+                toast.error('Something went wrong! Please try again later');
+            }
+        }
+    }
+
 
     const filteredUsers = useMemo(() => {
         return users.filter(user => {
@@ -136,6 +155,7 @@ const UserTable: React.FC<UserTableProps> = ({ initialUsers, initialTotalUsers, 
 
     return (
         <div className="container mx-auto px-4 py-8 h-full w-full">
+            <Toaster />
             <Table
                 className='h-full w-full bg-content1-900 p-3 rounded-2xl overflow-auto'
                 removeWrapper
@@ -198,6 +218,14 @@ const UserTable: React.FC<UserTableProps> = ({ initialUsers, initialTotalUsers, 
                     )}
                 </TableBody>
             </Table>
+            <AcceptModal
+                isOpen={delOpen}
+                onOpenChange={setDelOpen}
+                acceptBtn="DELETE"
+                title="DELETE USER"
+                description="Are your sure you want to delete this User. Action cannot be undo!"
+                onAccept={onDeleteAccept}
+            />
         </div>
     );
 };
