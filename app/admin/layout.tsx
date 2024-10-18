@@ -15,17 +15,15 @@ const AdminLayout = async ({ children }: AdminLayoutProps) => {
     if (!user) return redirect('/sign-in');
 
     return (
-        <section className="flex flex-col h-screen">
-            <div className="flex p-2 h-full gap-2">
-                <LeftSideBar user={user} />
-                <section className='w-full bg-content1-900 rounded-2xl flex flex-col h-full overflow-hidden'>
-                    <div>
-                        <AppBar user={user} />
-                    </div>
-                    {children}
-                </section>
-                <AdminRightSideBar user={user} />
-            </div>
+        <section className="flex p-2 h-full gap-2">
+            <LeftSideBar user={user} />
+            <section className='w-full bg-content1-900 rounded-2xl flex flex-col h-full overflow-hidden'>
+                <div>
+                    <AppBar user={user} />
+                </div>
+                {children}
+            </section>
+            <AdminRightSideBar user={user} />
         </section>
     );
 }

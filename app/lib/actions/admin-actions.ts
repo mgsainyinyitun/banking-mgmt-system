@@ -3,7 +3,8 @@ import { MonthlyData, User, UserDetail, UserList } from "@/app/types/types";
 import prisma from "../prisma";
 import { ACCOUNT_TYPE, Prisma } from "@prisma/client";
 import bcrypt from 'bcryptjs';
-import { AddAccountSchema, ProfileSchema } from "@/app/types/form-shema";
+import { AddAccountSchema, ProfileSchema, AdminUserUpdateSchema } from "@/app/types/form-shema";
+import { revalidatePath } from 'next/cache';
 
 
 export const getUserCounts = async () => {
@@ -252,4 +253,42 @@ export const getUserGrowthData = async () => {
     });
 
     return sortedData;
+};
+
+export const updateUserAdmin = async (data: AdminUserUpdateSchema) => {
+    try {
+        const updatedUser = await prisma.user.update({
+            where: { id: data.id },
+            data: {
+                username: data.username,
+                nrc: data.nrc,
+                email: data.email,
+                phone: data.phone,
+                city: data.city,
+                state: data.state,
+                address: data.address,
+                type: data.type,
+            },
+        });
+
+        const bankAccount = await prisma.bankAccount.findFirst({
+            where: { userId: data.id },
+        });
+
+        if (bankAccount && data.status) {
+            await prisma.bankAccount.update({
+                where: { id: bankAccount.id },
+                data: {
+                    accountStatus: data.status,
+                },
+            });
+        }
+
+        revalidatePath('/admin');
+
+        return { success: true, user: updatedUser };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: 'Failed to update user.' };
+    }
 };

@@ -1,4 +1,5 @@
 import { CalendarDate } from "@internationalized/date";
+import { ACCOUNT_TYPE, AccountStatus } from "@prisma/client";
 import z from 'zod';
 
 export const signInSchema = z.object({
@@ -156,3 +157,23 @@ export type PasswordChangeSchema = z.infer<typeof passwordChangeSchema>
 export type NewSupportTicketSchema = z.infer<typeof newSupportTicketSchema>
 
 export type AddAccountSchema = z.infer<typeof addAccountSchema>
+
+export const adminUserUpdateSchema = z.object({
+    id: z.string().uuid(),
+    type: z.nativeEnum(ACCOUNT_TYPE).optional(),
+    // profileImage: z.string().optional(),
+    username: z.string().min(1, { message: "Username is required" }).optional(),
+    email: z.string().email({ message: "Invalid email address" }).optional(),
+    phone: z.string().min(1, { message: "Phone number is required" }).optional(),
+    city: z.string().min(1, { message: "City is required" }).optional(),
+    state: z.string().min(1, { message: "State is required" }).optional(),
+    address: z.string().min(1, { message: "Address is required" }).optional(),
+    nrc: z.string().min(1, { message: "NRC is required" }).optional(),
+    dob: z.date().optional(),
+    createdAt: z.date().optional(),
+    updatedAt: z.date().optional(),
+    status: z.nativeEnum(AccountStatus).optional(),
+    bankAccountNumber: z.string().optional(),
+});
+
+export type AdminUserUpdateSchema = z.infer<typeof adminUserUpdateSchema>;
