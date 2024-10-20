@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
+## Banking Management System
 
 First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+#
+Banking Management System built with **Next.js** and **TypeScript**, featuring distinct modules for both admin and customer users. The admin section includes a robust dashboard that provides real-time insights through components like UserCountCards, UserGrowth, and MoneyFlow visualizations powered by Recharts. Administrators can manage user accounts, view detailed user profiles, handle transactions, and configure settings through intuitive interfaces. The customer side offers functionalities such as viewing account balances, recent transactions, managing profiles, and handling invoices, all wrapped in a responsive and user-friendly design using NextUI components. The project leverages Prisma for database interactions, ensuring efficient data management and scalability. Additionally, features like authentication, theming, and real-time updates enhance the overall user experience, making the system both secure and highly interactive.
+#
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![banking-mgmt-sys](https://github.com/user-attachments/assets/b68107f4-5d71-4005-b416-29b9ec56d7ce)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Database ER Diagram
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+![banking_mgmt_sys](https://github.com/user-attachments/assets/7a081c51-85da-4534-a790-bdd2bdf3b1e2)
 
-## Learn More
+### Customer Screen (Dark)
 
-To learn more about Next.js, take a look at the following resources:
+![image](https://github.com/user-attachments/assets/8fb87299-e33e-4b87-b328-2b1c62bdb6b3)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Customer Screen (Light)
+![image](https://github.com/user-attachments/assets/d95aeb2a-c6ea-4a63-b2b1-ff0b2ca7f06a)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Admin Screen
 
-## Deploy on Vercel
+![image](https://github.com/user-attachments/assets/db6e8c50-1d68-40e2-99b8-b9f7f2799209)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
