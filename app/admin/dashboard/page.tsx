@@ -2,6 +2,7 @@ import UserCountCards from './UserCountCards';
 import UserGrowth from './UserGrowth';
 import MoneyFlow from './MoneyFlow';
 import { getUserCounts } from '@/app/lib/actions/admin-actions';
+import React from 'react';
 
 const AdminDashboard = async () => {
     const { adminCount, customerCount, tellerCount, total } = await getUserCounts();
